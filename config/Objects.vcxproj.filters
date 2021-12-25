@@ -1,89 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{8812a09f-3116-416c-9b01-12943ed49de2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
-      <UniqueIdentifier>{1fec6bc7-c905-4499-8c45-a5433ef0f412}</UniqueIdentifier>
+      <UniqueIdentifier>{70c16cf9-1d9b-4a73-a8e4-ba3fd19884c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\scr\NodesEntry.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\classobject.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\Nodes.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\dictobject.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\UI.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\intobject.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\object.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\listobject.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\intobject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\methodobject.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\dictobject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\nullobject.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\classobject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\object.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\methodobject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\objectcall.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\nullobject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\objectsave.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\listobject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\PyInterp.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\scr\PyInterp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\scr\PyNdo.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\scr\objectcall.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\scr\objectsave.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\src\PyNdo.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\intobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\object.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\methodobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\classobject.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\dictobject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\UI.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\nullobject.h">
+    <ClInclude Include="..\include\intobject.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\listobject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\PyNdo.h">
+    <ClInclude Include="..\include\methodobject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\nullobject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\object.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\objectcall.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\PyInterp.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\objectcall.h">
+    <ClInclude Include="..\include\PyNdo.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
