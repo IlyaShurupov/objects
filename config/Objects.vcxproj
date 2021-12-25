@@ -27,6 +27,7 @@
     <ClCompile Include="..\src\classobject.cpp" />
     <ClCompile Include="..\src\dictobject.cpp" />
     <ClCompile Include="..\src\intobject.cpp" />
+    <ClCompile Include="..\src\linkobject.cpp" />
     <ClCompile Include="..\src\listobject.cpp" />
     <ClCompile Include="..\src\methodobject.cpp" />
     <ClCompile Include="..\src\nullobject.cpp" />
@@ -35,11 +36,13 @@
     <ClCompile Include="..\src\objectsave.cpp" />
     <ClCompile Include="..\src\PyInterp.cpp" />
     <ClCompile Include="..\src\PyNdo.cpp" />
+    <ClCompile Include="..\src\stringobject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\classobject.h" />
     <ClInclude Include="..\include\dictobject.h" />
     <ClInclude Include="..\include\intobject.h" />
+    <ClInclude Include="..\include\linkobject.h" />
     <ClInclude Include="..\include\listobject.h" />
     <ClInclude Include="..\include\methodobject.h" />
     <ClInclude Include="..\include\nullobject.h" />
@@ -47,6 +50,7 @@
     <ClInclude Include="..\include\objectcall.h" />
     <ClInclude Include="..\include\PyInterp.h" />
     <ClInclude Include="..\include\PyNdo.h" />
+    <ClInclude Include="..\include\stringobject.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

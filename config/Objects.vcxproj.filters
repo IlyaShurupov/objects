@@ -42,6 +42,12 @@
     <ClCompile Include="..\src\PyNdo.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\linkobject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\stringobject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\classobject.h">
@@ -72,6 +78,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\PyNdo.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\linkobject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\stringobject.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

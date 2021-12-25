@@ -29,7 +29,17 @@ void Emb_dealloc(Py_EmbObj* self) {
 
 PyObject* Emb_repr(PyObject* self) {
 	Object* ndo = ((Py_EmbObj*)self)->ndo_ptr;
-	return PyUnicode_FromString(ndo->type->name.str);
+
+	string out;
+	out = "type - ";
+	out += ndo->type->name;
+
+	if (ndo->type->convesions && ndo->type->convesions->to_string) {
+		out += "\ninfo - ";
+		out += ndo->type->convesions->to_string(ndo);
+	}
+
+	return PyUnicode_FromString(out.str);
 }
 
 static PyObject* EmbObj_get_child(PyObject* self, PyObject* args) {
