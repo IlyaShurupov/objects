@@ -52,7 +52,7 @@ sys.stdout = catchOut\n\
 sys.stderr = catchOut\n\
 ";
 
-	Py_SetPythonHome(L"G:/src/python310");
+	Py_SetPythonHome(L"A:/src/python310");
 
 	PyImport_AppendInittab("npy", PyInit_cModPyDem);
 
