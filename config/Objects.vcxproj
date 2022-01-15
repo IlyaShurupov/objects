@@ -24,33 +24,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\classobject.cpp" />
-    <ClCompile Include="..\src\dictobject.cpp" />
-    <ClCompile Include="..\src\intobject.cpp" />
-    <ClCompile Include="..\src\linkobject.cpp" />
-    <ClCompile Include="..\src\listobject.cpp" />
-    <ClCompile Include="..\src\methodobject.cpp" />
-    <ClCompile Include="..\src\nullobject.cpp" />
-    <ClCompile Include="..\src\object.cpp" />
-    <ClCompile Include="..\src\objectcall.cpp" />
-    <ClCompile Include="..\src\objectsave.cpp" />
-    <ClCompile Include="..\src\PyInterp.cpp" />
-    <ClCompile Include="..\src\PyNdo.cpp" />
-    <ClCompile Include="..\src\stringobject.cpp" />
+    <ClInclude Include="..\include\object\object.h" />
+    <ClInclude Include="..\include\primitives\dictobject.h" />
+    <ClInclude Include="..\include\primitives\intobject.h" />
+    <ClInclude Include="..\include\primitives\linkobject.h" />
+    <ClInclude Include="..\include\primitives\listobject.h" />
+    <ClInclude Include="..\include\primitives\nullobject.h" />
+    <ClInclude Include="..\include\primitives\primitives.h" />
+    <ClInclude Include="..\include\primitives\stringobject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\classobject.h" />
-    <ClInclude Include="..\include\dictobject.h" />
-    <ClInclude Include="..\include\intobject.h" />
-    <ClInclude Include="..\include\linkobject.h" />
-    <ClInclude Include="..\include\listobject.h" />
-    <ClInclude Include="..\include\methodobject.h" />
-    <ClInclude Include="..\include\nullobject.h" />
-    <ClInclude Include="..\include\object.h" />
-    <ClInclude Include="..\include\objectcall.h" />
-    <ClInclude Include="..\include\PyInterp.h" />
-    <ClInclude Include="..\include\PyNdo.h" />
-    <ClInclude Include="..\include\stringobject.h" />
+    <ClCompile Include="..\src\object\object.cpp" />
+    <ClCompile Include="..\src\object\objectsave.cpp" />
+    <ClCompile Include="..\src\primitives\dictobject.cpp" />
+    <ClCompile Include="..\src\primitives\intobject.cpp" />
+    <ClCompile Include="..\src\primitives\linkobject.cpp" />
+    <ClCompile Include="..\src\primitives\listobject.cpp" />
+    <ClCompile Include="..\src\primitives\nullobject.cpp" />
+    <ClCompile Include="..\src\primitives\stringobject.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -58,7 +49,7 @@
     <ProjectGuid>{8A1B6AAD-C516-4B51-A93E-6D7B23D449FD}</ProjectGuid>
     <RootNamespace>Types</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Objects</ProjectName>
+    <ProjectName>objects</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -169,7 +160,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include;$(ProjectDir)..\..\Python310\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -193,7 +184,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include;$(ProjectDir)..\..\Python310\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>

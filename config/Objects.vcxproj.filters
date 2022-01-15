@@ -2,89 +2,74 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="include">
-      <UniqueIdentifier>{70c16cf9-1d9b-4a73-a8e4-ba3fd19884c8}</UniqueIdentifier>
+      <UniqueIdentifier>{a232610b-3b38-44b5-a376-8a4c8b0f51bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\primitives">
+      <UniqueIdentifier>{8f75d9c5-28f8-4e2d-9e01-2c92c41a7cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\object">
+      <UniqueIdentifier>{eb86b921-5793-4ca1-af8b-fc6de9660014}</UniqueIdentifier>
     </Filter>
     <Filter Include="source">
-      <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
+      <UniqueIdentifier>{379ffb0c-60f1-455d-ba0f-289191d81ad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\object">
+      <UniqueIdentifier>{86b3ee72-897e-4a37-9bcc-446b38eab418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\primitives">
+      <UniqueIdentifier>{3abe1812-2685-4a22-a2f2-d8ca2cfc358d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\classobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\dictobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\intobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\listobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\methodobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\nullobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\object.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\objectcall.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\objectsave.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PyInterp.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PyNdo.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\linkobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\stringobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
+    <ClInclude Include="..\include\primitives\dictobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\intobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\linkobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\listobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\nullobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\stringobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\object\object.h">
+      <Filter>include\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\primitives.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\classobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\dictobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\intobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\listobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\methodobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\nullobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\object.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\objectcall.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\PyInterp.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\PyNdo.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\linkobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\stringobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClCompile Include="..\src\primitives\dictobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\intobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\linkobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\listobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\nullobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\stringobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\object\object.cpp">
+      <Filter>source\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\object\objectsave.cpp">
+      <Filter>source\object</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
