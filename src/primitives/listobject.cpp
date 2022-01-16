@@ -50,7 +50,7 @@ static void save(ListObject* self, File& file_self) {
 
 static void load(File& file_self, ListObject* self) {
 
-	new (&self->items) List<Object*>();
+	new (&self->items) List<Object*>(0);
 
 	alni len; 
 	file_self.read<alni>(&len);

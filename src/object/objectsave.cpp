@@ -199,6 +199,8 @@ void objects_api::save(Object* in, string path) {
 		}
 	}
 
+	ndf.avl_adress = ndf.adress;
+
 	save(ndf, in);
 
 	// postsave
@@ -215,16 +217,18 @@ Object* objects_api::load(string path) {
 	loaded_file = (int1*)malloc(ndf.size());
 	ndf.read_bytes(loaded_file, ndf.size());
 
-	// postsave
+	ndf.adress = 0;
+
+	// preload
 	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
 		if (sl_callbacks[i] && sl_callbacks[i]->pre_load) {
 			sl_callbacks[i]->pre_load(sl_callbacks[i]->self, ndf);
 		}
 	}
 
-	Object* out = load(ndf, 0);
+	Object* out = load(ndf, ndf.adress);
 
-	// postsave
+	// post
 	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
 		if (sl_callbacks[i] && sl_callbacks[i]->post_save) {
 			sl_callbacks[i]->post_load(sl_callbacks[i]->self, ndf);

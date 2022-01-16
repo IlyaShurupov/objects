@@ -71,6 +71,7 @@ static void save(DictObject* self, File& file_self) {
 static void load(File& file_self, DictObject* self) {
 
 	new (&self->items) hmap<Object*, string>();
+	self->items.del_values = 0;
 
 	alni len;
 	file_self.read<alni>(&len);
