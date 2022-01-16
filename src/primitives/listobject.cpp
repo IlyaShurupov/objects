@@ -13,20 +13,21 @@ void ListObject::constructor(Object* in) {
 
 void ListObject::copy(Object* in, const Object* target) {
 	NDO_CASTV(ListObject, in, self);
-	
-	for (auto item : self->items) {
-		NDO->destroy(item.Data());
-	}
+	NDO_CASTV(ListObject, target, src);
 
-	self->items = NDO_CAST(ListObject, target)->items;
+	self->items.Clear();
+
+	for (auto item : src->items) {
+		
+		Object* instance = NDO->create(item->type->name);
+		instance->type->copy(instance, item.Data());
+
+		self->items.PushBack(instance);
+	}
 }
 
 void ListObject::destructor(Object* in) {
 	NDO_CASTV(ListObject, in, self);
-
-	for (auto item : self->items) {
-		NDO->destroy(item.Data());
-	}
 	
 	self->items.Clear();
 }
@@ -62,17 +63,17 @@ static void load(File& file_self, ListObject* self) {
 }
 
 
-void lest_method_get_length(Object* self, object_caller* caller) {
+void list_method_get_length(Object* self, object_caller* caller) {
 	NDO_CAST(IntObject, caller->get(0))->val = NDO_CAST(ListObject, self)->items.Len();
 }
 
-void lest_method_push_back(Object* self, object_caller* caller) {
+void list_method_push_back(Object* self, object_caller* caller) {
 	NDO_CAST(ListObject, self)->items.PushBack(caller->get(0));
 }
 
-type_method* ListObjectTypeMethods[] = {
-	lest_method_push_back,
-	lest_method_get_length,
+type_method ListObjectTypeMethods[] = {
+	{"push_back", list_method_push_back},
+	{"get_len", list_method_get_length},
 };
 
 

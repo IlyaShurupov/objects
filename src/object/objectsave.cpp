@@ -13,6 +13,7 @@ struct ObjectMemHead {
 
 ObjectMemHead* bottom = nullptr;
 
+
 Object* ObjectMemAllocate(const ObjectType* type) {
 	ObjectMemHead* memh = (ObjectMemHead*)malloc(type->size + sizeof(ObjectMemHead));
 	if (!memh) {
@@ -186,11 +187,26 @@ Object* objects_api::load(File& ndf, alni file_adress) {
 void objects_api::save(Object* in, string path) {
 	File ndf(path.str, FileOpenFlags::SAVE);
 
+	// clear all object flags
 	for (ObjectMemHead* iter = bottom; iter; iter = iter->up) {
 		iter->flags = -1;
 	}
 
+	// presave
+	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
+		if (sl_callbacks[i] && sl_callbacks[i]->pre_save) {
+			sl_callbacks[i]->pre_save(sl_callbacks[i]->self, ndf);
+		}
+	}
+
 	save(ndf, in);
+
+	// postsave
+	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
+		if (sl_callbacks[i] && sl_callbacks[i]->post_save) {
+			sl_callbacks[i]->post_save(sl_callbacks[i]->self, ndf);
+		}
+	}
 }
 
 Object* objects_api::load(string path) {
@@ -199,8 +215,27 @@ Object* objects_api::load(string path) {
 	loaded_file = (int1*)malloc(ndf.size());
 	ndf.read_bytes(loaded_file, ndf.size());
 
+	// postsave
+	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
+		if (sl_callbacks[i] && sl_callbacks[i]->pre_load) {
+			sl_callbacks[i]->pre_load(sl_callbacks[i]->self, ndf);
+		}
+	}
+
 	Object* out = load(ndf, 0);
+
+	// postsave
+	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
+		if (sl_callbacks[i] && sl_callbacks[i]->post_save) {
+			sl_callbacks[i]->post_load(sl_callbacks[i]->self, ndf);
+		}
+	}
 
 	free(loaded_file);
 	return out;
+}
+
+void objects_api::add_sl_callbacks(save_load_callbacks* in) {
+	sl_callbacks[sl_callbacks_load_idx] = in;
+	sl_callbacks_load_idx++;
 }

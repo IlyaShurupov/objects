@@ -12,9 +12,9 @@ int main() {
 	
 	oh->set(myint, alni(12));
 
-	oh->save(myint, "C:\\myint.o");
+	oh->save(myint, "A:\\data\\tmp\\myint.o");
 	
-	Object* saved_int = oh->load("C:\\myint.o");
+	Object* saved_int = oh->load("A:\\data\\tmp\\myint.o");
 	
 	NDO_CAST(IntObject, saved_int)->val;
 }

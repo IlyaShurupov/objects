@@ -51,7 +51,11 @@ struct object_caller {
 	virtual void ret(Object*) = 0;
 };
 
-typedef void (type_method)(Object* self, object_caller*);
+typedef void (type_method_adress)(Object* self, object_caller*);
+typedef struct {
+	string name; 
+	type_method_adress* adress;
+} type_method;
 
 struct ObjectType {
 	const ObjectType* base;
@@ -64,30 +68,46 @@ struct ObjectType {
 	object_save_size save_size = NULL;
 	object_save save = NULL;
 	object_load load = NULL;
-	type_method** methods = NULL;
+	type_method* methods = NULL;
 };
+
+
+#define SAVE_LOAD_MAX_CALLBACK_SLOTS 100
+typedef void (pre_save_callback)(void* self, File&);
+typedef void (pre_load_callback)(void* self, File&);
+typedef void (post_save_callback)(void* self, File&);
+typedef void (post_load_callback)(void* self, File&);
+struct save_load_callbacks {
+	void* self;
+	pre_save_callback* pre_save;
+	pre_load_callback* pre_load;
+	post_save_callback* post_save;
+	post_load_callback* post_load;
+};
+
 
 struct objects_api {
 
 	hmap<const ObjectType*, string> types;
 
 	void define(ObjectType* type);
-
 	Object* create(string name);
 	Object* copy(Object* self, const Object* in);
-	
 	void set(Object* self, alni val);
 	void set(Object* self, alnf val);
 	void set(Object* self, string val);
+	void destroy(Object* in);
 
-	alni save(File&, Object*);
-	Object* load(File&, alni file_adress);
+	
+	save_load_callbacks* sl_callbacks[SAVE_LOAD_MAX_CALLBACK_SLOTS];
+	alni sl_callbacks_load_idx = 0;
+
+	void add_sl_callbacks(save_load_callbacks*);
 
 	void save(Object*, string path);
 	Object* load(string path);
-
-	void destroy(Object* in);
-
+	alni save(File&, Object*);
+	Object* load(File&, alni file_adress);
 };
 
 Object* ndo_cast(const Object* in, const ObjectType* to_type);

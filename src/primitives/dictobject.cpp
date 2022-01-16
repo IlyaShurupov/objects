@@ -2,18 +2,29 @@
 
 #include "primitives/dictobject.h"
 
+void DictObject::constructor(Object* self) {
+	NDO_CASTV(DictObject, self, dict);
 
-void DictObject::copy(Object* self, const Object* in) {
-	NDO_CAST(DictObject, self)->items = NDO_CAST(DictObject, in)->items;
+	new (&dict->items) hmap<Object*, string>();
+
+	dict->items.del_values = false;
+}
+
+void DictObject::copy(Object* in, const Object* target) {
+	NDO_CASTV(DictObject, in, self);
+	NDO_CASTV(DictObject, target, src);
+
+	self->items.clear();
+
+	for (auto item : src->items) {
+		Object* instance = NDO->create(item->val->type->name);
+		instance->type->copy(instance, item->val);
+		self->items.Put(item->key, instance);
+	}
 }
 
 void DictObject::destructor(Object* self) {
 	NDO_CASTV(DictObject, self, dict);
-
-	for (auto item : dict->items) {
-		NDO->destroy(item->val);
-	}
-
 	dict->items.clear();
 }
 
@@ -83,14 +94,6 @@ static void load(File& file_self, DictObject* self) {
 		// add to dictinary
 		self->items.Put(key, val);
 	}
-}
-
-void DictObject::constructor(Object* self) {
-	NDO_CASTV(DictObject, self, dict);
-
-	new (&dict->items) hmap<Object*, string>();
-
-	dict->items.del_values = false;
 }
 
 struct ObjectType DictObjectType = {
