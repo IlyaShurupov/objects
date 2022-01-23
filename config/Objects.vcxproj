@@ -41,6 +41,7 @@
     <ClCompile Include="..\src\primitives\linkobject.cpp" />
     <ClCompile Include="..\src\primitives\listobject.cpp" />
     <ClCompile Include="..\src\primitives\nullobject.cpp" />
+    <ClCompile Include="..\src\primitives\primitives.cpp" />
     <ClCompile Include="..\src\primitives\stringobject.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

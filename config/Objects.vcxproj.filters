@@ -71,5 +71,8 @@
     <ClCompile Include="..\src\object\objectsave.cpp">
       <Filter>source\object</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\primitives\primitives.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
