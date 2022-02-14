@@ -3,10 +3,14 @@
 
 #include "Types.h"
 
+#ifndef TYPES_1
+#error "types lib branch dismatch - switch to 'types1'"
+#endif
+
 #ifdef _DEBUG
 #define NDO_CAST(cast_type, ptr) ((cast_type*)ndo_cast(ptr, &cast_type##Type))
 #else
-#define NDO_CAST(cast_type, ptr) (cast_type*)ptr)
+#define NDO_CAST(cast_type, ptr) ((cast_type*)ptr)
 #endif
 
 #define NDO_CASTV(cast_type, ptr, var_name) cast_type* var_name = NDO_CAST(cast_type, ptr); var_name
