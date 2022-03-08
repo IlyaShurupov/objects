@@ -25,9 +25,7 @@ void IntObject::from_float(Object* self, alnf in) {
 }
 
 void IntObject::from_string(Object* self, string in) {
-	int out;
-	str_from_string(&in, out);
-	NDO_CAST(IntObject, self)->val = out;
+	NDO_CAST(IntObject, self)->val = in;
 }
 
 string IntObject::to_string(Object* self) {
@@ -46,11 +44,11 @@ static alni save_size(IntObject* self) {
 	return sizeof(alni);
 }
 
-static void save(IntObject* self, File& file_self) {
+static void save(IntObject* self, osfile& file_self) {
 	file_self.write<alni>(&self->val);
 }
 
-static void load(File& file_self, IntObject* self) {
+static void load(osfile& file_self, IntObject* self) {
 	file_self.read<alni>(&self->val);
 }
 

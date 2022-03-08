@@ -5,9 +5,7 @@
 void DictObject::constructor(Object* self) {
 	NDO_CASTV(DictObject, self, dict);
 
-	new (&dict->items) hmap<Object*, string>();
-
-	dict->items.del_values = false;
+	new (&dict->items) HashMap<Object*, string>();
 }
 
 void DictObject::copy(Object* in, const Object* target) {
@@ -39,7 +37,7 @@ static alni save_size(DictObject* self) {
 		// string length
 		save_size += sizeof(alni);
 		// string itself
-		save_size += item->key.len() * sizeof(*item->key.str);
+		save_size += item->key.size() * sizeof(*item->key.cstr());
 		// object file adress
 		save_size += sizeof(alni);
 	}
@@ -47,7 +45,7 @@ static alni save_size(DictObject* self) {
 	return save_size;
 }
 
-static void save(DictObject* self, File& file_self) {
+static void save(DictObject* self, osfile& file_self) {
 
 	// write size
 	alni len = self->items.nentries;
@@ -60,18 +58,17 @@ static void save(DictObject* self, File& file_self) {
 		file_self.write<alni>(&ndo_object_adress);
 
 		// item key len
-		alni key_len = item->key.len();
+		alni key_len = item->key.size();
 		file_self.write<alni>(&key_len);
 
 		// item key val
-		file_self.write_bytes(item->key.str, item->key.len());
+		file_self.write_bytes(item->key.cstr(), item->key.size());
 	}
 }
 
-static void load(File& file_self, DictObject* self) {
+static void load(osfile& file_self, DictObject* self) {
 
-	new (&self->items) hmap<Object*, string>();
-	self->items.del_values = 0;
+	new (&self->items) HashMap<Object*, string>();
 
 	alni len;
 	file_self.read<alni>(&len);
@@ -89,8 +86,8 @@ static void load(File& file_self, DictObject* self) {
 
 		// read key value
 		string key;
-		key.alloc(key_len);
-		file_self.read_bytes(key.str, key_len);
+		key.reserve(key_len);
+		file_self.read_bytes(key.get_writable(), key_len);
 
 		// add to dictinary
 		self->items.Put(key, val);

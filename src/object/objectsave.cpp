@@ -2,6 +2,8 @@
 
 #include "object/object.h"
 
+#include <malloc.h>
+
 #define NDO_MEMH_FROM_NDO(ndo_ptr) (((ObjectMemHead*)ndo_ptr) - 1)
 #define NDO_FROM_MEMH(ndo_ptr) ((Object*)(ndo_ptr + 1))
 
@@ -54,8 +56,8 @@ struct ObjectFileHead {
 
 	ObjectFileHead(const ObjectType* in) {
 		alni i = 0;
-		for (; in->name.str[i] != '\0'; i++) {
-			type_name[i] = in->name.str[i];
+		for (; in->name[i] != '\0'; i++) {
+			type_name[i] = in->name[i];
 		}
 		type_name[i] = '\0';
 		load_head_adress = 0;
@@ -85,7 +87,7 @@ alni object_full_file_size(Object* self, const ObjectType* type) {
 	return out;
 }
 
-void object_recursive_save(File& ndf, Object* self, const ObjectType* type) {
+void object_recursive_save(osfile& ndf, Object* self, const ObjectType* type) {
 	if (type->base) {
 		object_recursive_save(ndf, self, type->base);
 	}
@@ -96,7 +98,7 @@ void object_recursive_save(File& ndf, Object* self, const ObjectType* type) {
 	}
 }
 
-alni objects_api::save(File& ndf, Object* in) {
+alni objects_api::save(osfile& ndf, Object* in) {
 
 	// if already saved return file_adress
 	if (NDO_MEMH_FROM_NDO(in)->flags != -1) {
@@ -137,7 +139,7 @@ alni objects_api::save(File& ndf, Object* in) {
 	return save_adress;
 }
 
-void object_recursive_load(File& ndf, Object* out, const ObjectType* type) {
+void object_recursive_load(osfile& ndf, Object* out, const ObjectType* type) {
 	if (type->base) {
 		object_recursive_load(ndf, out, type->base);
 	}
@@ -148,7 +150,7 @@ void object_recursive_load(File& ndf, Object* out, const ObjectType* type) {
 	}
 }
 
-Object* objects_api::load(File& ndf, alni file_adress) {
+Object* objects_api::load(osfile& ndf, alni file_adress) {
 
 	// check if already saved
 	if (((ObjectFileHead*)(loaded_file + file_adress))->load_head_adress) {
@@ -185,7 +187,7 @@ Object* objects_api::load(File& ndf, alni file_adress) {
 }
 
 void objects_api::save(Object* in, string path) {
-	File ndf(path.str, FileOpenFlags::SAVE);
+	osfile ndf(path, osfile_openflags::SAVE);
 
 	// clear all object flags
 	for (ObjectMemHead* iter = bottom; iter; iter = iter->up) {
@@ -212,7 +214,7 @@ void objects_api::save(Object* in, string path) {
 }
 
 Object* objects_api::load(string path) {
-	File ndf(path.str, FileOpenFlags::LOAD);
+	osfile ndf(path, osfile_openflags::LOAD);
 
 	loaded_file = (int1*)malloc(ndf.size());
 	ndf.read_bytes(loaded_file, ndf.size());

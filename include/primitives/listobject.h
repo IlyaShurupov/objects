@@ -9,7 +9,7 @@ enum ListMethods {
 };
 
 struct ListObject : Object {
-	List<Object*> items;
+	list<Object*> items;
 
 	static void constructor(Object* self);
 	static void copy(Object* self, const Object* in);

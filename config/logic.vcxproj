@@ -19,12 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="Objects.vcxproj">
       <Project>{8a1b6aad-c516-4b51-a93e-6d7b23d449fd}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\tests\oedit\main.cpp" />
+    <ClCompile Include="..\tests\oedit\oedit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\tests\oedit\oedit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -32,17 +36,17 @@
     <ProjectGuid>{B3349850-6BE2-48BE-94A6-2233C90A8C6B}</ProjectGuid>
     <RootNamespace>Types</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>example</ProjectName>
+    <ProjectName>object_tests</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -81,23 +85,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\tests\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\tests\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\tests\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\tests\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)..\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\tests\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\tests\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)..\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\tests\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\tests\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,12 +111,15 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\Dev\src\glew\include;D:\Dev\src\glfw\include;$(ProjectDir)..\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc;$(ProjectDir)..\inc;$(ProjectDir)..\..\imgui\;$(ProjectDir)..\..\imgui\backends;$(ProjectDir)..\..\glew\include;$(ProjectDir)..\..\glfw\include;$(ProjectDir)..\..\implot\;$(ProjectDir)..\..\imgui-vs\amgui</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>imgui.lib;opengl32.lib;glfw3.lib;string.lib;osystem.lib;container.lib;allocator.lib;common.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\common\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\container\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\string\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\osystem\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\allocator\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\imgui-vs\lib\$(Platform)\$(Configuration)\;$(ProjectDir)..\..\glew\lib\$(Configuration)\\$(Platform);$(ProjectDir)..\..\glfw\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,7 +132,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\Dev\src\glew\include;D:\Dev\src\glfw\include;$(ProjectDir)..\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc;$(ProjectDir)..\inc;$(ProjectDir)..\..\imgui\;$(ProjectDir)..\..\imgui\backends;$(ProjectDir)..\..\glew\include;$(ProjectDir)..\..\glfw\include;$(ProjectDir)..\..\implot\;$(ProjectDir)..\..\imgui-vs\amgui</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -133,6 +141,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>imgui.lib;opengl32.lib;glfw3.lib;string.lib;osystem.lib;container.lib;allocator.lib;common.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\common\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\container\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\string\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\osystem\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\allocator\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\imgui-vs\lib\$(Platform)\$(Configuration)\;$(ProjectDir)..\..\glew\lib\$(Configuration)\\$(Platform);$(ProjectDir)..\..\glfw\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,14 +153,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc;$(ProjectDir)..\inc;$(ProjectDir)..\..\imgui\;$(ProjectDir)..\..\imgui\backends;$(ProjectDir)..\..\glew\include;$(ProjectDir)..\..\glfw\include;$(ProjectDir)..\..\implot\;$(ProjectDir)..\..\imgui-vs\amgui</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Types\lib\Debug;$(ProjectDir)..\..\glfw\lib\x64\debug;$(ProjectDir)..\..\nanovg\lib\x64\Debug;$(ProjectDir)..\..\glew\lib\Debug\x64;$(ProjectDir)..\..\python310\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>python310.lib;nanovg.lib;types.lib;glfw3.lib;glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\common\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\container\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\string\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\osystem\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\allocator\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\imgui-vs\lib\$(Platform)\$(Configuration)\;$(ProjectDir)..\..\glew\lib\$(Configuration)\\$(Platform);$(ProjectDir)..\..\glfw\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>imgui.lib;opengl32.lib;glfw3.lib;string.lib;osystem.lib;container.lib;allocator.lib;common.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>
@@ -167,15 +177,15 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc;$(ProjectDir)..\inc;$(ProjectDir)..\..\imgui\;$(ProjectDir)..\..\imgui\backends;$(ProjectDir)..\..\glew\include;$(ProjectDir)..\..\glfw\include;$(ProjectDir)..\..\implot\;$(ProjectDir)..\..\imgui-vs\amgui</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Types\lib\Release;$(ProjectDir)..\..\glfw\lib\x64;$(ProjectDir)..\..\nanovg\lib\x64\Release;$(ProjectDir)..\..\glew\lib\Release\x64;$(ProjectDir)..\..\python310\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>nanovg.lib;types.lib;glfw3.lib;glew32s.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\common\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\container\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\string\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\osystem\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\types\modules\allocator\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\imgui-vs\lib\$(Platform)\$(Configuration)\;$(ProjectDir)..\..\glew\lib\$(Configuration)\\$(Platform);$(ProjectDir)..\..\glfw\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>imgui.lib;opengl32.lib;glfw3.lib;string.lib;osystem.lib;container.lib;allocator.lib;common.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>

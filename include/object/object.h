@@ -1,10 +1,14 @@
 
 #pragma once
 
-#include "Types.h"
+#include "common.h"
+#include "containers.h"
+#include "allocators.h"
+#include "strings.h"
+#include "file.h"
 
-#ifndef TYPES_1
-#error "types lib branch dismatch - switch to 'types1'"
+#ifndef TYPES_V2
+#error "types lib branch dismatch - switch to 'types2'"
 #endif
 
 #ifdef _DEBUG
@@ -47,8 +51,8 @@ typedef void (*object_constructor)(Object* self);
 typedef void (*object_destructor)(Object* self);
 typedef void (*object_copy)(Object* self, const Object* target);
 typedef alni (*object_save_size)(Object* self);
-typedef void (*object_save)(Object*, File&);
-typedef void (*object_load)(File&, Object*);
+typedef void (*object_save)(Object*, osfile&);
+typedef void (*object_load)(osfile&, Object*);
 
 struct object_caller {
 	virtual Object* get(alni idx) = 0;
@@ -77,10 +81,10 @@ struct ObjectType {
 
 
 #define SAVE_LOAD_MAX_CALLBACK_SLOTS 100
-typedef void (pre_save_callback)(void* self, File&);
-typedef void (pre_load_callback)(void* self, File&);
-typedef void (post_save_callback)(void* self, File&);
-typedef void (post_load_callback)(void* self, File&);
+typedef void (pre_save_callback)(void* self, osfile&);
+typedef void (pre_load_callback)(void* self, osfile&);
+typedef void (post_save_callback)(void* self, osfile&);
+typedef void (post_load_callback)(void* self, osfile&);
 struct save_load_callbacks {
 	void* self;
 	pre_save_callback* pre_save;
@@ -92,7 +96,7 @@ struct save_load_callbacks {
 
 struct objects_api {
 
-	hmap<const ObjectType*, string> types;
+	HashMap<const ObjectType*, string> types;
 
 	void define(ObjectType* type);
 	Object* create(string name);
@@ -110,8 +114,8 @@ struct objects_api {
 
 	void save(Object*, string path);
 	Object* load(string path);
-	alni save(File&, Object*);
-	Object* load(File&, alni file_adress);
+	alni save(osfile&, Object*);
+	Object* load(osfile&, alni file_adress);
 };
 
 Object* ndo_cast(const Object* in, const ObjectType* to_type);

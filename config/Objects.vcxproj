@@ -19,8 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Types\config\TypesLib\TypesLib.vcxproj">
+    <ProjectReference Include="..\..\types\modules\allocator\cfg\allocator.vcxproj">
       <Project>{98d6ae72-22f4-4498-ace5-21ad0b4abf0a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\types\modules\common\cfg\common.vcxproj">
+      <Project>{1500663a-e20c-4ab8-b3aa-78a2cae43d86}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\types\modules\container\cfg\container.vcxproj">
+      <Project>{ffdd1c2c-9699-44b5-825c-e56eb6274546}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\types\modules\osystem\cfg\os.vcxproj">
+      <Project>{7ea2e75d-25ec-482f-b57d-ba08e085e1cf}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\types\modules\string\cfg\string.vcxproj">
+      <Project>{3dec959d-9484-4bb6-819c-2a8074ea3600}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -99,13 +111,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\lib\.tmp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\lib\.tmp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -125,7 +137,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\Dev\src\glew\include;D:\Dev\src\glfw\include;$(ProjectDir)..\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -143,7 +155,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\Dev\src\glew\include;D:\Dev\src\glfw\include;$(ProjectDir)..\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -161,7 +173,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -185,7 +197,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>

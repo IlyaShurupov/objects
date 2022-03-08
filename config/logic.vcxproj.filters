@@ -6,8 +6,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\main.cpp">
+    <ClCompile Include="..\tests\oedit\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\tests\oedit\oedit.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\tests\oedit\oedit.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
