@@ -216,6 +216,10 @@ void objects_api::save(Object* in, string path) {
 Object* objects_api::load(string path) {
 	osfile ndf(path, osfile_openflags::LOAD);
 
+	if (!ndf.opened) {
+		return NULL;
+	}
+
 	loaded_file = (int1*)malloc(ndf.size());
 	ndf.read_bytes(loaded_file, ndf.size());
 
