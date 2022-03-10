@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\imgui-vs\amgui\amgui.vcxproj">
+      <Project>{6e225d12-1c66-4a38-bee5-71c4dbec0521}</Project>
+    </ProjectReference>
     <ProjectReference Include="Objects.vcxproj">
       <Project>{8a1b6aad-c516-4b51-a93e-6d7b23d449fd}</Project>
     </ProjectReference>

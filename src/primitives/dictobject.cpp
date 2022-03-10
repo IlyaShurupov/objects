@@ -12,7 +12,9 @@ void DictObject::copy(Object* in, const Object* target) {
 	NDO_CASTV(DictObject, in, self);
 	NDO_CASTV(DictObject, target, src);
 
-	self->items.clear();
+	self->items.~HashMap();
+
+	new (&self->items) HashMap<Object*, string>();
 
 	for (auto item : src->items) {
 		Object* instance = NDO->create(item->val->type->name);
