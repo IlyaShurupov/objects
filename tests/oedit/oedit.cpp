@@ -101,9 +101,7 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 				}
 				else {
 					active->items.Remove(childo->key);
-					string key = name;
-					key.capture();
-					active->items.Put(key, name_parent);
+					active->items.Put(string(name).capture(), name_parent);
 					name_parent = NULL;
 					ImGui::EndPopup();
 					ImGui::PopID();
@@ -144,7 +142,17 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 	if (!popup && ImGui::BeginPopupContextItem("child_2", ImGuiPopupFlags_MouseButtonRight)) {
 
 		if (ImGui::Selectable("Paste")) {
-			active->items.Put("clipboard object", clipboard);
+
+			alni idx = 1;
+			string name_base = string("clipboard ") + clipboard->type->name + string(" ");
+			string name_out = name_base;
+
+			while (active->items.Presents(name_out) != -1) {
+				name_out = name_base + string(idx);
+				idx++;
+			}
+
+			active->items.Put(name_out, clipboard);
 		}
 
 		if (ImGui::BeginMenu("Create")) {
@@ -158,7 +166,18 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 
 				if (ImGui::Selectable(childo.iter->key.cstr())) {
 					Object* newo = oh->create(childo->key);
-					active->items.Put("new object", newo);
+					
+					alni idx = 1;
+					string name_base = string("new ") + newo->type->name + string(" ");
+					string name_out = name_base;
+
+					while (active->items.Presents(name_out) != -1) {
+						name_out = name_base + string(idx);
+						idx++;
+					}
+
+					active->items.Put(name_out, newo);
+
 					ImGui::PopID();
 					break;
 				}
@@ -295,8 +314,7 @@ object_path stringo_view(StringObject* in, Object*& clipboard, objects_api* oh) 
 	ImGui::InputTextMultiline(" ", val, 2048, {ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowContentRegionWidth() * 1.1f });
 
 	if (in->val != val) {
-		in->val = val;
-		in->val.capture();
+		in->val = string(val).capture();
 	}
 
 	return object_path();
@@ -426,7 +444,8 @@ void oeditor::oproperties(const ObjectType* type) {
 			ImGui::PopID();
 		}
 	}
-	ImGui::Text("Size: %i bytes", type->size);
+	ImGui::Text("Object Struct Size: %i bytes", type->size);
+	if (type->save_size) ImGui::Text("Object Save Size: %i bytes", type->save_size(active));
 	
 	if (type->methods) {
 		ImGui::BeginChild("methods", { ImGui::GetWindowContentRegionWidth(), 350 }, false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_HorizontalScrollbar);
