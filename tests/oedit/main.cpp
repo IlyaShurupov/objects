@@ -2,16 +2,20 @@
 
 #include "oedit.h"
 
-oeditor* oedit;
+#include "imgui_utils.h"
 
-void imGuiWindowInitialize() {
-	oedit = new oeditor();
-}
+class ImgUIoeditor : public imGuiDefaultApp {
+  oeditor oedit;
 
-void imGuiWindowFinalize() {
-	delete oedit;
-}
+ public:
+  ImgUIoeditor() {}
+  bool mainloop_tick() override {
+    oedit.draw();
+    return true;
+  }
+};
 
-void imGuiWindowDraw() {
-	oedit->draw();
+int main() {
+  ImgUIoeditor app;
+  app.mainloop();
 }

@@ -157,7 +157,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\types\modules\common\inc;$(ProjectDir)..\..\types\modules\allocator\inc;$(ProjectDir)..\..\types\modules\container\inc;$(ProjectDir)..\..\types\modules\string\inc;$(ProjectDir)..\..\types\modules\osystem\inc;$(ProjectDir)..\inc;$(ProjectDir)..\..\imgui\;$(ProjectDir)..\..\imgui\backends;$(ProjectDir)..\..\glew\include;$(ProjectDir)..\..\glfw\include;$(ProjectDir)..\..\implot\;$(ProjectDir)..\..\imgui-vs\amgui</AdditionalIncludeDirectories>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
