@@ -44,11 +44,11 @@ static alni save_size(IntObject* self) {
 	return sizeof(alni);
 }
 
-static void save(IntObject* self, osfile& file_self) {
+static void save(IntObject* self, File& file_self) {
 	file_self.write<alni>(&self->val);
 }
 
-static void load(osfile& file_self, IntObject* self) {
+static void load(File& file_self, IntObject* self) {
 	file_self.read<alni>(&self->val);
 }
 

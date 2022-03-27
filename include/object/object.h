@@ -51,8 +51,8 @@ typedef void (*object_constructor)(Object* self);
 typedef void (*object_destructor)(Object* self);
 typedef void (*object_copy)(Object* self, const Object* target);
 typedef alni (*object_save_size)(Object* self);
-typedef void (*object_save)(Object*, osfile&);
-typedef void (*object_load)(osfile&, Object*);
+typedef void (*object_save)(Object*, File&);
+typedef void (*object_load)(File&, Object*);
 
 struct object_caller {
 	virtual Object* get(alni idx) = 0;
@@ -81,10 +81,10 @@ struct ObjectType {
 
 
 #define SAVE_LOAD_MAX_CALLBACK_SLOTS 100
-typedef void (pre_save_callback)(void* self, osfile&);
-typedef void (pre_load_callback)(void* self, osfile&);
-typedef void (post_save_callback)(void* self, osfile&);
-typedef void (post_load_callback)(void* self, osfile&);
+typedef void (pre_save_callback)(void* self, File&);
+typedef void (pre_load_callback)(void* self, File&);
+typedef void (post_save_callback)(void* self, File&);
+typedef void (post_load_callback)(void* self, File&);
 struct save_load_callbacks {
 	void* self;
 	pre_save_callback* pre_save;
@@ -114,8 +114,8 @@ struct objects_api {
 
 	void save(Object*, string path);
 	Object* load(string path);
-	alni save(osfile&, Object*);
-	Object* load(osfile&, alni file_adress);
+	alni save(File&, Object*);
+	Object* load(File&, alni file_adress);
 };
 
 Object* ndo_cast(const Object* in, const ObjectType* to_type);

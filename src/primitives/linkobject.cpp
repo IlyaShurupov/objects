@@ -20,7 +20,7 @@ static alni save_size(LinkObject* self) {
 	return sizeof(alni);
 }
 
-static void save(LinkObject* self, osfile& file_self) {
+static void save(LinkObject* self, File& file_self) {
 	if (self->link != NULL) {
 		alni link_object_save_adress = NDO->save(file_self, self->link);
 		file_self.write<alni>(&link_object_save_adress);
@@ -31,7 +31,7 @@ static void save(LinkObject* self, osfile& file_self) {
 	}
 }
 
-static void load(osfile& file_self, LinkObject* self) {
+static void load(File& file_self, LinkObject* self) {
 	
 	alni saved_object_adress;
 	file_self.read<alni>(&saved_object_adress);

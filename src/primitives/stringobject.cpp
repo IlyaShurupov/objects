@@ -44,13 +44,13 @@ static alni save_size(StringObject* self) {
 	return self->val.size() + sizeof(alni);
 }
 
-static void save(StringObject* self, osfile& file_self) {
+static void save(StringObject* self, File& file_self) {
 	alni len = self->val.size();
 	file_self.write<alni>(&len);
 	file_self.write_bytes(self->val.cstr(), len);
 }
 
-static void load(osfile& file_self, StringObject* self) {
+static void load(File& file_self, StringObject* self) {
 	alni len;
 	file_self.read<alni>(&len);
 

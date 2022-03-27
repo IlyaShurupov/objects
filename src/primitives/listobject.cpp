@@ -37,7 +37,7 @@ static alni save_size(ListObject* self) {
 	return (len + 1) * sizeof(alni);
 }
 
-static void save(ListObject* self, osfile& file_self) {
+static void save(ListObject* self, File& file_self) {
 
 	alni len = self->items.Len();
 	file_self.write<alni>(&len);
@@ -48,7 +48,7 @@ static void save(ListObject* self, osfile& file_self) {
 	}
 }
 
-static void load(osfile& file_self, ListObject* self) {
+static void load(File& file_self, ListObject* self) {
 
 	new (&self->items) list<Object*>();
 

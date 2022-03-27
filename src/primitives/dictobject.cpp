@@ -47,7 +47,7 @@ static alni save_size(DictObject* self) {
 	return save_size;
 }
 
-static void save(DictObject* self, osfile& file_self) {
+static void save(DictObject* self, File& file_self) {
 
 	// write size
 	alni len = self->items.nentries;
@@ -68,7 +68,7 @@ static void save(DictObject* self, osfile& file_self) {
 	}
 }
 
-static void load(osfile& file_self, DictObject* self) {
+static void load(File& file_self, DictObject* self) {
 
 	new (&self->items) HashMap<Object*, string>();
 
