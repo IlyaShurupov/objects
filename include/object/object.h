@@ -8,12 +8,14 @@
 #include "file.h"
 
 #ifndef TYPES_V2
-#error "types lib branch dismatch - switch to 'types2'"
+#error "types lib branch missmatch - switch to 'types2'"
 #endif
 
 #ifdef _DEBUG
 #define NDO_CAST(cast_type, ptr) ((cast_type*)ndo_cast(ptr, &cast_type##Type))
+#define NDO_CAST_ASSERT(cast_type, ptr) {assert(ndo_cast(ptr, &cast_type##Type))}
 #else
+#define NDO_CAST_ASSERT(cast_type, ptr) (0)
 #define NDO_CAST(cast_type, ptr) ((cast_type*)ptr)
 #endif
 
@@ -99,7 +101,7 @@ struct objects_api {
 	HashMap<const ObjectType*, string> types;
 
 	void define(ObjectType* type);
-	Object* create(string name);
+	Object* create(const string& name);
 	Object* copy(Object* self, const Object* in);
 	void set(Object* self, alni val);
 	void set(Object* self, alnf val);

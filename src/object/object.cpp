@@ -14,7 +14,7 @@ void objects_api::define(ObjectType* type) {
 	types.Put(type->name, type);
 }
 
-Object* objects_api::create(string name) {
+Object* objects_api::create(const string& name) {
 	const ObjectType* type = types.Get(name);
 
 	Object* obj_instance = ObjectMemAllocate(type);
