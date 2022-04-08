@@ -53,23 +53,7 @@ void ObjectMemDeallocate(Object* in) {
 }
 
 struct ObjectFileHead {
-
-	ObjectFileHead(const ObjectType* in) {
-		alni i = 0;
-		for (; in->name[i] != '\0'; i++) {
-			type_name[i] = in->name[i];
-		}
-		type_name[i] = '\0';
-		load_head_adress = 0;
-	}
-
-	ObjectFileHead() {
-		type_name[15] = 0;
-		load_head_adress = 0;
-	}
-
-	char type_name[16];
-	Object* load_head_adress;
+	Object* load_head_adress = 0;
 };
 
 int1* loaded_file = nullptr;
@@ -118,11 +102,12 @@ alni objects_api::save(File& ndf, Object* in) {
 	ndf.adress = save_adress;
 
 	// save file object header
-	ObjectFileHead ofh(in->type);
-	ndf.write<ObjectFileHead>(&ofh);
+	ObjectFileHead ofh;
+	ndf.write(&ofh);
+	ndf.write(in->type->name);
 
 	// allocate for object file header
-	ndf.avl_adress += sizeof(ObjectFileHead);
+	ndf.avl_adress += sizeof(ObjectFileHead) + in->type->name.size() + 1;
 
 	// calc max size needed for saving all hierarchy of types
 	alni file_alloc_size = object_full_file_size(in, in->type);
@@ -165,8 +150,10 @@ Object* objects_api::load(File& ndf, alni file_adress) {
 
 	ObjectFileHead ofh;
 	ndf.read<ObjectFileHead>(&ofh);
+	string type_name;
+	ndf.read(type_name);
 
-	const ObjectType* object_type = NDO->types.Get(ofh.type_name);
+	const ObjectType* object_type = NDO->types.Get(type_name);
 	Object* out = ObjectMemAllocate(object_type);
 
 	if (!out) {

@@ -37,9 +37,7 @@ static alni save_size(DictObject* self) {
 
 	for (auto item : self->items) {
 		// string length
-		save_size += sizeof(alni);
-		// string itself
-		save_size += item->key.size() * sizeof(*item->key.cstr());
+    save_size += (item->key.size() + 1) * sizeof(*item->key.cstr());
 		// object file adress
 		save_size += sizeof(alni);
 	}
@@ -59,12 +57,8 @@ static void save(DictObject* self, File& file_self) {
 		alni ndo_object_adress = NDO->save(file_self, item->val);
 		file_self.write<alni>(&ndo_object_adress);
 
-		// item key len
-		alni key_len = item->key.size();
-		file_self.write<alni>(&key_len);
-
-		// item key val
-		file_self.write_bytes(item->key.cstr(), item->key.size());
+		// item key
+		file_self.write(item->key);
 	}
 }
 
@@ -82,14 +76,9 @@ static void load(File& file_self, DictObject* self) {
 		file_self.read<alni>(&ndo_object_adress);
 		Object* val = NDO->load(file_self, ndo_object_adress);
 
-		// read key length
-		alni key_len = 0;
-		file_self.read<alni>(&key_len);
-
 		// read key value
 		string key;
-		key.reserve(key_len);
-		file_self.read_bytes(key.get_writable(), key_len);
+		file_self.read(key);
 
 		// add to dictinary
 		self->items.Put(key, val);
