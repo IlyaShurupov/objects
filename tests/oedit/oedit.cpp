@@ -73,7 +73,7 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 
 	ImGui::BeginChild("child_2", { 0, 0 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 	for (auto childo : active->items) {
-		ImGui::PushID(childo.entry_idx);
+		ImGui::PushID((int)childo.entry_idx);
 
 		if (ImGui::Selectable(childo.iter->key.cstr())) {
 			out = { childo.iter->val,  childo.iter->val->type->name + " '" + childo.iter->key + "'" };
@@ -162,7 +162,7 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 			ImGui::BeginChild("child_4", { 100, 140 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 			for (auto childo : oh->types) {
-				ImGui::PushID(childo.entry_idx);
+				ImGui::PushID((int)childo.entry_idx);
 
 				if (ImGui::Selectable(childo.iter->key.cstr())) {
 					Object* newo = oh->create(childo->key);
@@ -209,7 +209,7 @@ object_path listo_view(ListObject* active, Object*& clipboard, objects_api* oh) 
 
 	ImGui::BeginChild("child_2", { 0, 0 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 	for (auto childo : active->items) {
-		ImGui::PushID(childo.Idx());
+		ImGui::PushID((int)childo.Idx());
 
 		if (ImGui::Selectable(childo->type->name.cstr())) {
 			out = object_path(childo.Data(), childo->type->name + " at " + string(childo.Idx()));
@@ -278,7 +278,7 @@ object_path listo_view(ListObject* active, Object*& clipboard, objects_api* oh) 
 			ImGui::BeginChild("child_4", { 100, 140 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 			for (auto childo : oh->types) {
-				ImGui::PushID(childo.entry_idx);
+				ImGui::PushID((int)childo.entry_idx);
 
 				if (ImGui::Selectable(childo.iter->key.cstr())) {
 					Object* newo = oh->create(childo->key);
@@ -334,7 +334,7 @@ void oeditor::oexplorer() {
 	}
 	alni idx = 0;
 	for (auto childo = rev_path.last; childo; childo = childo->prev) {
-		ImGui::PushID(idx);
+		ImGui::PushID((int)idx);
 		bool go_back = false;
 		if (childo == rev_path.last) {
 			go_back = ImGui::Button(childo->data->id.cstr()); ImGui::SameLine();
