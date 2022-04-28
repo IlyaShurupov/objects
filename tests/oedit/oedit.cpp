@@ -3,19 +3,17 @@
 #include "imgui.h"
 #include "implot.h"
 #include "imgui_internal.h"
-#include "imgui_utils.h"
 
 #include "oedit.h"
 
-
-oeditor::oeditor() {
+oeditor::oeditor() : window(vec2f(1400, 800)) {
 	oh = objects_init();
 	primitives_define_types(oh);
 	test();
 
-	root = (DictObject*)oh->create("dict");
+	root = (DictObject*) oh->create("dict");
 	active = root;
-	path.push({ active , "dict 'root'" });
+	path.push({active , "dict 'root'"});
 }
 
 object_path nullo_view(Object* in, Object*& clipboard, objects_api* oh) {
@@ -30,10 +28,9 @@ object_path linko_view(LinkObject* in, Object*& clipboard, objects_api* oh) {
 		ImGui::Text("%s at %x", in->link->type->name.cstr(), in->link);
 
 		if (ImGui::Selectable("View")) {
-			return { in->link, "adress" };
+			return {in->link, "adress"};
 		}
-	}
-	else {
+	} else {
 		ImGui::Text("Link Is Null");
 	}
 
@@ -53,9 +50,9 @@ object_path linko_view(LinkObject* in, Object*& clipboard, objects_api* oh) {
 
 object_path into_view(IntObject* in, Object*& clipboard, objects_api* oh) {
 	ImGui::Text("Int Value: "); ImGui::SameLine();
-	int val = (int)in->val;
+	int val = (int) in->val;
 	ImGui::InputInt(" ", &val);
-	in->val = (alni)val;
+	in->val = (alni) val;
 	return object_path();
 }
 
@@ -66,17 +63,16 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 
 	if (active->items.nentries) {
 		ImGui::Text("Dictinary Items: ");
-	}
-	else {
+	} else {
 		ImGui::Text("Dictinary Is Empty. ");
 	}
 
-	ImGui::BeginChild("child_2", { 0, 0 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+	ImGui::BeginChild("child_2", {0, 0}, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 	for (auto childo : active->items) {
-		ImGui::PushID((int)childo.entry_idx);
+		ImGui::PushID((int) childo.entry_idx);
 
 		if (ImGui::Selectable(childo.iter->key.cstr())) {
-			out = { childo.iter->val,  childo.iter->val->type->name + " '" + childo.iter->key + "'" };
+			out = {childo.iter->val,  childo.iter->val->type->name + " '" + childo.iter->key + "'"};
 			ImGui::PopID();
 			break;
 		}
@@ -87,19 +83,18 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 			ImGui::Text("%s at %x", childo->val->type->name.cstr(), childo->val);
 
 			static Object* name_parent = NULL;
-			static char name[100] = { "asdas" };
+			static char name[100] = {"asdas"};
 
 			if (name_parent != childo) {
 				memcp(name, childo->key.cstr(), childo->key.size() + 1);
 				name_parent = childo;
 			}
 
-			if (ImGui::InputTextEx(" ", "new name", name, 100, { 140 , 30 }, ImGuiInputTextFlags_EnterReturnsTrue)) {
+			if (ImGui::InputTextEx(" ", "new name", name, 100, {140 , 30}, ImGuiInputTextFlags_EnterReturnsTrue)) {
 				alni idx = active->items.Presents(name);
 				if (idx != -1) {
-					Notify("Object with such name Already Exists");
-				}
-				else {
+					//gui.Notify("Object with such name Already Exists");
+				} else {
 					active->items.Remove(childo->key);
 					active->items.Put(string(name).capture(), name_parent);
 					name_parent = NULL;
@@ -159,14 +154,14 @@ object_path dicto_view(DictObject* active, Object*& clipboard, objects_api* oh) 
 
 			ImGui::Text("Types: ");
 
-			ImGui::BeginChild("child_4", { 100, 140 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+			ImGui::BeginChild("child_4", {100, 140}, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 			for (auto childo : oh->types) {
-				ImGui::PushID((int)childo.entry_idx);
+				ImGui::PushID((int) childo.entry_idx);
 
 				if (ImGui::Selectable(childo.iter->key.cstr())) {
 					Object* newo = oh->create(childo->key);
-					
+
 					alni idx = 1;
 					string name_base = string("new ") + newo->type->name + string(" ");
 					string name_out = name_base;
@@ -202,14 +197,13 @@ object_path listo_view(ListObject* active, Object*& clipboard, objects_api* oh) 
 
 	if (active->items.Len()) {
 		ImGui::Text("List Items: ");
-	}
-	else {
+	} else {
 		ImGui::Text("List Is Empty. ");
 	}
 
-	ImGui::BeginChild("child_2", { 0, 0 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+	ImGui::BeginChild("child_2", {0, 0}, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 	for (auto childo : active->items) {
-		ImGui::PushID((int)childo.Idx());
+		ImGui::PushID((int) childo.Idx());
 
 		if (ImGui::Selectable(childo->type->name.cstr())) {
 			out = object_path(childo.Data(), childo->type->name + " at " + string(childo.Idx()));
@@ -235,7 +229,7 @@ object_path listo_view(ListObject* active, Object*& clipboard, objects_api* oh) 
 				ImGui::PopID();
 				break;
 			}
-			
+
 			if (childo.node()->prev && ImGui::Selectable("Move Up")) {
 				SWAP(childo.node()->prev->data, childo.Data(), Object*);
 				ImGui::EndPopup();
@@ -275,10 +269,10 @@ object_path listo_view(ListObject* active, Object*& clipboard, objects_api* oh) 
 
 			ImGui::Text("Types: ");
 
-			ImGui::BeginChild("child_4", { 100, 140 }, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+			ImGui::BeginChild("child_4", {100, 140}, true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 			for (auto childo : oh->types) {
-				ImGui::PushID((int)childo.entry_idx);
+				ImGui::PushID((int) childo.entry_idx);
 
 				if (ImGui::Selectable(childo.iter->key.cstr())) {
 					Object* newo = oh->create(childo->key);
@@ -305,13 +299,13 @@ object_path stringo_view(StringObject* in, Object*& clipboard, objects_api* oh) 
 
 	ImGui::Text("String Data: ");
 
-	static char val[2048] = { " " };
+	static char val[2048] = {" "};
 
 	if (in->val != val) {
 		memcp(val, in->val.cstr(), in->val.size() + 1);
 	}
 
-	ImGui::InputTextMultiline(" ", val, 2048, {ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowContentRegionWidth() * 1.1f });
+	ImGui::InputTextMultiline(" ", val, 2048, {ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowContentRegionWidth() * 1.1f});
 
 	if (in->val != val) {
 		in->val = string(val).capture();
@@ -327,19 +321,18 @@ object_path floato_view(Object* in, Object*& clipboard, objects_api* oh) {
 void oeditor::oexplorer() {
 
 	//ImGui::Text("View Path: "); ImGui::SameLine();
-	ImGui::BeginChild("child_path", { ImGui::GetWindowContentRegionWidth(), 45}, false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_HorizontalScrollbar);
+	ImGui::BeginChild("child_path", {ImGui::GetWindowContentRegionWidth(), 45}, false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_HorizontalScrollbar);
 	stack<object_path*> rev_path;
 	for (auto childo = path.last; childo; childo = childo->prev) {
 		rev_path.push(&childo->data);
 	}
 	alni idx = 0;
 	for (auto childo = rev_path.last; childo; childo = childo->prev) {
-		ImGui::PushID((int)idx);
+		ImGui::PushID((int) idx);
 		bool go_back = false;
 		if (childo == rev_path.last) {
 			go_back = ImGui::Button(childo->data->id.cstr()); ImGui::SameLine();
-		}
-		else {
+		} else {
 			go_back = ImGui::Button((childo->data->id).cstr()); ImGui::SameLine();
 		}
 		ImGui::PopID();
@@ -349,7 +342,7 @@ void oeditor::oexplorer() {
 			Object* curretn_object = childo->data->obj;
 			ImGui::Text("%s at %x", curretn_object->type->name.cstr(), curretn_object);
 			ImGui::Separator();
-			
+
 			if (ImGui::Selectable("Copy Link")) {
 				clipboard = curretn_object;
 			}
@@ -357,30 +350,29 @@ void oeditor::oexplorer() {
 			if (ImGui::Selectable("Instantiate  ")) {
 				clipboard = oh->create(curretn_object->type->name.cstr());
 				oh->copy(clipboard, curretn_object);
-				Notify("Object copied to clipboard");
+				gui.Notify("Object copied to clipboard");
 			}
 
 			ImGui::Separator();
 
-			static char path_str[100] = { "data.o\0" };
-			ImGui::InputTextEx(" ", "save path", path_str, 100, { 100, 30 }, 0);
+			static char path_str[100] = {"data.o\0"};
+			ImGui::InputTextEx(" ", "save path", path_str, 100, {100, 30}, 0);
 
-			bool save_object = ImGui::Selectable("Save Object"); 
+			bool save_object = ImGui::Selectable("Save Object");
 			bool load_object = ImGui::Selectable("Load Object");
 
 			if (save_object) {
 				oh->save(curretn_object, path_str);
-				Notify("Object saved");
+				gui.Notify("Object saved");
 			}
 
 			if (load_object) {
 				Object* loadedo = oh->load(path_str);
 				if (loadedo) {
 					clipboard = loadedo;
-					Notify("Object copied to clipboard");
-				}
-				else {
-					Notify("Can't load Object");
+					gui.Notify("Object copied to clipboard");
+				} else {
+					gui.Notify("Can't load Object");
 				}
 			}
 
@@ -404,26 +396,19 @@ void oeditor::oexplorer() {
 	object_path new_active;
 	if (active->type->name == "null") {
 		new_active = nullo_view(active, clipboard, oh);
-	}
-	else if (active->type->name == "link") {
-		new_active = linko_view((LinkObject*)active, clipboard, oh);
-	}
-	else if (active->type->name == "int") {
-		new_active = into_view((IntObject*)active, clipboard, oh);
-	}
-	else if (active->type->name == "float") {
+	} else if (active->type->name == "link") {
+		new_active = linko_view((LinkObject*) active, clipboard, oh);
+	} else if (active->type->name == "int") {
+		new_active = into_view((IntObject*) active, clipboard, oh);
+	} else if (active->type->name == "float") {
 		new_active = floato_view(active, clipboard, oh);
-	}
-	else if (active->type->name == "str") {
-		new_active = stringo_view((StringObject*)active, clipboard, oh);
-	}
-	else if (active->type->name == "list") {
-		new_active = listo_view((ListObject*)active, clipboard, oh);
-	}
-	else if (active->type->name == "dict") {
-		new_active = dicto_view((DictObject*)active, clipboard, oh);
-	}
-	else {
+	} else if (active->type->name == "str") {
+		new_active = stringo_view((StringObject*) active, clipboard, oh);
+	} else if (active->type->name == "list") {
+		new_active = listo_view((ListObject*) active, clipboard, oh);
+	} else if (active->type->name == "dict") {
+		new_active = dicto_view((DictObject*) active, clipboard, oh);
+	} else {
 		ImGui::Text("Unknown Type");
 	}
 
@@ -434,7 +419,7 @@ void oeditor::oexplorer() {
 }
 
 void oeditor::oproperties(const ObjectType* type) {
-	ImGui::SameLine(); 
+	ImGui::SameLine();
 	ImGui::Text("Type: %s", type->name.cstr());
 	if (type->base) {
 		ImGui::Text("Inherits From"); ImGui::SameLine();
@@ -446,9 +431,9 @@ void oeditor::oproperties(const ObjectType* type) {
 	}
 	ImGui::Text("Object Struct Size: %i bytes", type->size);
 	if (type->save_size) ImGui::Text("Object Save Size: %i bytes", type->save_size(active));
-	
+
 	if (type->methods) {
-		ImGui::BeginChild("methods", { ImGui::GetWindowContentRegionWidth(), 350 }, false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_HorizontalScrollbar);
+		ImGui::BeginChild("methods", {ImGui::GetWindowContentRegionWidth(), 350}, false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_HorizontalScrollbar);
 
 		ImGui::Text("type Methods: ");
 
@@ -462,16 +447,28 @@ void oeditor::oproperties(const ObjectType* type) {
 	}
 }
 
-void oeditor::draw() {
-	if (EditorWindow("Explorer")) {
-		oexplorer();
-	}
-	ImGui::End();
+void oeditor::run() {
+	while (!window.CloseSignal()) {
+		
+		window.begin_draw();
+		window.clear();
+		gui.frame_start();
 
-	if (EditorWindow("Object Info")) {
-		oproperties(active->type);
+		gui.WindowMain("oedit");
+
+		if (gui.WindowEditor("Explorer")) {
+			oexplorer();
+		}
+		ImGui::End();
+
+		if (gui.WindowEditor("Object Info")) {
+			oproperties(active->type);
+		}
+		ImGui::End();
+
+		gui.frame_end();
+		window.end_draw();
 	}
-	ImGui::End();
 }
 
 void oeditor::test() {

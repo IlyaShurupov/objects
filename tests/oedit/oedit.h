@@ -2,6 +2,11 @@
 #include "object/object.h"
 #include "primitives/primitives.h"
 
+#include "gl.h"
+#include "window.h"
+
+#include "DebugGui.h"
+
 struct object_path {
 	object_path(Object* obj, string id) : obj(obj), id(id) {
 	}
@@ -15,7 +20,10 @@ struct object_path {
 };
 
 class oeditor {
-	
+	ogl::opengl gl;
+	ogl::window window;
+	DebugGui gui = DebugGui(window.geth());
+
 	objects_api* oh;
 
 	DictObject* root;
@@ -30,7 +38,7 @@ public:
 	void oexplorer();
 	void oproperties(const ObjectType*);
 
-	void draw();
+	void run();
 	void test();
 
 	~oeditor();
