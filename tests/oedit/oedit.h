@@ -1,42 +1,44 @@
 
-#include "object/object.h"
-#include "primitives/primitives.h"
+//#include "object/object.h"
+//#include "primitives/primitives.h"
 
-#include "gl.h"
-#include "window.h"
+//#include "gl.h"
+//#include "window.h"
 
-#include "ImGuiClass.h"
+#include "ImGuiObjectEditor.h"
 
-struct object_path {
-	object_path(Object* obj, string id) : obj(obj), id(id) {
-	}
-	object_path() {
-		obj = NULL;
-	}
-
-	operator bool() { return obj; }
-	Object* obj;
-	string id;
-};
-
-class oeditor : public ImGui::CompleteApp {
+class oeditor_test : public ImGui::CompleteApp {
 
 	objects_api* oh;
 
 	DictObject* root;
-	
+
 	Object* active;
-	stack<object_path> path;
+	stack<ImGui::object_path> path;
 	Object* clipboard = NULL;
 
-public:
-	oeditor();
 
-	void oexplorer();
-	void oproperties(const ObjectType*);
+	ImGui::ImGuiObjectEditor objects_gui;
 
-	void MainDrawTick();
-	void test();
+	public:
 
-	~oeditor();
+	oeditor_test() {
+		oh = objects_init();
+		primitives_define_types(oh);
+		root = (DictObject*) oh->create("dict");
+		active = root;
+		path.push({active , "dict 'root'"});
+
+		objects_gui.oedior_init(root, oh, &window);
+	}
+
+	
+	void MainDrawTick() {
+		objects_gui.Draw();
+	}
+	
+	~oeditor_test() {
+		oh->destroy(root);
+		objects_finalize();
+	}
 };

@@ -123,3 +123,4 @@ struct objects_api {
 Object* ndo_cast(const Object* in, const ObjectType* to_type);
 
 objects_api* objects_init();
+void objects_finalize();

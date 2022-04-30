@@ -3,6 +3,6 @@
 #include "oedit.h"
 
 int main() {
-  oeditor app;
+  oeditor_test app;
   app.Run();
 }
