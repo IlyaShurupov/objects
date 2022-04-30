@@ -4,5 +4,5 @@
 
 int main() {
   oeditor app;
-  app.run();
+  app.Run();
 }

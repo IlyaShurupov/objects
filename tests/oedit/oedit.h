@@ -5,7 +5,7 @@
 #include "gl.h"
 #include "window.h"
 
-#include "DebugGui.h"
+#include "ImGuiClass.h"
 
 struct object_path {
 	object_path(Object* obj, string id) : obj(obj), id(id) {
@@ -19,10 +19,7 @@ struct object_path {
 	string id;
 };
 
-class oeditor {
-	ogl::opengl gl;
-	ogl::window window;
-	DebugGui gui = DebugGui(window.geth());
+class oeditor : public ImGui::CompleteApp {
 
 	objects_api* oh;
 
@@ -38,7 +35,7 @@ public:
 	void oexplorer();
 	void oproperties(const ObjectType*);
 
-	void run();
+	void MainDrawTick();
 	void test();
 
 	~oeditor();

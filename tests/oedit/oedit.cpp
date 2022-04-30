@@ -1,12 +1,11 @@
 
 
-#include "imgui.h"
-#include "implot.h"
-#include "imgui_internal.h"
-
 #include "oedit.h"
 
-oeditor::oeditor() : window(vec2f(1400, 800)) {
+//#include "imgui.h"
+#include "imgui_internal.h"
+
+oeditor::oeditor() : ImGui::CompleteApp(vec2f(1400, 800)) {
 	oh = objects_init();
 	primitives_define_types(oh);
 	test();
@@ -350,7 +349,7 @@ void oeditor::oexplorer() {
 			if (ImGui::Selectable("Instantiate  ")) {
 				clipboard = oh->create(curretn_object->type->name.cstr());
 				oh->copy(clipboard, curretn_object);
-				gui.Notify("Object copied to clipboard");
+				Notify("Object copied to clipboard");
 			}
 
 			ImGui::Separator();
@@ -363,16 +362,16 @@ void oeditor::oexplorer() {
 
 			if (save_object) {
 				oh->save(curretn_object, path_str);
-				gui.Notify("Object saved");
+				Notify("Object saved");
 			}
 
 			if (load_object) {
 				Object* loadedo = oh->load(path_str);
 				if (loadedo) {
 					clipboard = loadedo;
-					gui.Notify("Object copied to clipboard");
+					Notify("Object copied to clipboard");
 				} else {
-					gui.Notify("Can't load Object");
+					Notify("Can't load Object");
 				}
 			}
 
@@ -447,28 +446,16 @@ void oeditor::oproperties(const ObjectType* type) {
 	}
 }
 
-void oeditor::run() {
-	while (!window.CloseSignal()) {
-		
-		window.begin_draw();
-		window.clear();
-		gui.frame_start();
-
-		gui.WindowMain("oedit");
-
-		if (gui.WindowEditor("Explorer")) {
-			oexplorer();
-		}
-		ImGui::End();
-
-		if (gui.WindowEditor("Object Info")) {
-			oproperties(active->type);
-		}
-		ImGui::End();
-
-		gui.frame_end();
-		window.end_draw();
+void oeditor::MainDrawTick() {
+	if (WindowEditor("Explorer")) {
+		oexplorer();
 	}
+	ImGui::End();
+
+	if (WindowEditor("Object Info")) {
+		oproperties(active->type);
+	}
+	ImGui::End();
 }
 
 void oeditor::test() {
