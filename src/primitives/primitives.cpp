@@ -3,11 +3,14 @@
 
 #include "primitives/primitives.h"
 
-void primitives_define_types(objects_api* NDO) {
+void primitives_define_types() {
 
-	if (!NDO) {
+	static bool initialized = false;
+	if (initialized) {
 		return;
 	}
+
+	assert(NDO && "Objects library is not initialized");
 
 	NDO->define(&DictObjectType);
 	NDO->define(&IntObjectType);
@@ -15,4 +18,6 @@ void primitives_define_types(objects_api* NDO) {
 	NDO->define(&ListObjectType);
 	NDO->define(&NullObjectType);
 	NDO->define(&StringObjectType);
+
+	initialized = true;
 }

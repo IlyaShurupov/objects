@@ -15,6 +15,18 @@ struct ObjectMemHead {
 
 ObjectMemHead* bottom = nullptr;
 
+struct ObjectsFileHeader {
+	char name[10] = {0};
+	char version[10] = {0};
+
+	ObjectsFileHeader(bool default_val = true) {
+		if (default_val) {
+			memcp(&name, "objects", slen("objects") + 1);
+			memcp(&version, "0", slen("0") + 1);
+		}
+	}
+};
+
 
 Object* ObjectMemAllocate(const ObjectType* type) {
 	ObjectMemHead* memh = (ObjectMemHead*)malloc(type->size + sizeof(ObjectMemHead));
@@ -43,7 +55,7 @@ void ObjectMemDeallocate(Object* in) {
 	}
 
 	if (memh->down) {
-		memh->down = memh->up;
+		memh->down->up = memh->up;
 	}
 	else {
 		bottom = memh->up;
@@ -188,6 +200,10 @@ void objects_api::save(Object* in, string path) {
 		}
 	}
 
+	// save vesion info
+	ObjectsFileHeader header;
+	ndf.write(&header);
+
 	ndf.avl_adress = ndf.adress;
 
 	save(ndf, in);
@@ -206,11 +222,19 @@ Object* objects_api::load(string path) {
 	if (!ndf.opened) {
 		return NULL;
 	}
-
-	loaded_file = (int1*)malloc(ndf.size());
-	ndf.read_bytes(loaded_file, ndf.size());
+	
+	// check for compability
+	ObjectsFileHeader current_header;
+	ObjectsFileHeader loaded_header(false);
+	ndf.read(&loaded_header);
+	if (!memequal(&current_header, &loaded_header, sizeof(ObjectsFileHeader))) {
+		return NULL;
+	}
 
 	ndf.adress = 0;
+	loaded_file = (int1*)malloc(ndf.size());
+	ndf.read_bytes(loaded_file, ndf.size());
+	ndf.adress = sizeof(ObjectsFileHeader);
 
 	// preload
 	for (alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {

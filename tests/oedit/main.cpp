@@ -3,6 +3,13 @@
 #include "oedit.h"
 
 int main() {
-  oeditor_test app;
-  app.Run();
+	objects_init();
+	primitives_define_types();
+
+	{
+		oeditor_test app;
+		app.Run();
+	}
+
+	objects_finalize();
 }

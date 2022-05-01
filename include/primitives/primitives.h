@@ -8,4 +8,4 @@
 #include "primitives/nullobject.h"
 #include "primitives/stringobject.h"
 
-void primitives_define_types(objects_api* NDO);
+void primitives_define_types();
