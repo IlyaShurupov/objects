@@ -11,7 +11,7 @@ void hierarchy_copy(Object* self, const Object* in, const ObjectType* type);
 void hierarchy_construct(Object* self, const ObjectType* type);
 
 void objects_api::define(ObjectType* type) {
-	assert(types.Presents(type->name) == -1 && "Type Redefinition");
+	assert(!types.Presents(type->name) && "Type Redefinition");
 	types.Put(type->name, type);
 }
 
