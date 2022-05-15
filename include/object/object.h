@@ -7,6 +7,8 @@
 #include "strings.h"
 #include "file.h"
 
+#define OBJECT_REF_COUNT
+
 #ifndef TYPES_V2
 #error "types lib branch missmatch - switch to 'types2'"
 #endif
@@ -28,6 +30,18 @@ define struct members
 implement construct, destruct and copy methods */
 
 extern struct objects_api* NDO;
+
+#define NDO_MEMH_FROM_NDO(ndo_ptr) (((ObjectMemHead*)ndo_ptr) - 1)
+#define NDO_FROM_MEMH(ndo_ptr) ((Object*)(ndo_ptr + 1))
+
+struct ObjectMemHead {
+	ObjectMemHead* up;
+	ObjectMemHead* down;
+	alni flags;
+	#ifdef OBJECT_REF_COUNT
+	alni refc;
+	#endif
+};
 
 struct Object {
 	const struct ObjectType* type;
@@ -108,7 +122,10 @@ struct objects_api {
 	void set(Object* self, string val);
 	void destroy(Object* in);
 
-	
+	#ifdef OBJECT_REF_COUNT
+	void refinc();
+	#endif
+
 	save_load_callbacks* sl_callbacks[SAVE_LOAD_MAX_CALLBACK_SLOTS];
 	alni sl_callbacks_load_idx = 0;
 

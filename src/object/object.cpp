@@ -62,6 +62,15 @@ void objects_api::set(Object* self, string val) {
 
 
 void objects_api::destroy(Object* in) {
+
+	#ifdef OBJECT_REF_COUNT
+	ObjectMemHead* mh = NDO_MEMH_FROM_NDO(this);
+	if (mh->refc > 1) {
+		mh->refc--;
+		return;
+	}
+	#endif
+
 	if (!in) {
 		return;
 	}
@@ -72,6 +81,14 @@ void objects_api::destroy(Object* in) {
 
 	ObjectMemDeallocate(in);
 }
+
+#ifdef OBJECT_REF_COUNT
+void objects_api::refinc() {
+	ObjectMemHead* mh = NDO_MEMH_FROM_NDO(this);
+	mh->refc++;
+}
+#endif
+
 
 void hierarchy_copy(Object* self, const Object* in, const ObjectType* type) {
 	if (type->base) {
@@ -97,7 +114,7 @@ Object* ndo_cast(const Object* in, const ObjectType* to_type) {
 	const ObjectType* typeiter = in->type;
 	while (typeiter) {
 		if (typeiter == to_type) {
-			return (Object*)in;
+			return (Object*) in;
 		}
 		typeiter = typeiter->base;
 	}

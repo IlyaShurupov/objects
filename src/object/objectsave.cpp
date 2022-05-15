@@ -4,15 +4,6 @@
 
 #include <malloc.h>
 
-#define NDO_MEMH_FROM_NDO(ndo_ptr) (((ObjectMemHead*)ndo_ptr) - 1)
-#define NDO_FROM_MEMH(ndo_ptr) ((Object*)(ndo_ptr + 1))
-
-struct ObjectMemHead {
-	ObjectMemHead* up;
-	ObjectMemHead* down;
-	alni flags;
-};
-
 ObjectMemHead* bottom = nullptr;
 
 struct ObjectsFileHeader {
@@ -36,6 +27,10 @@ Object* ObjectMemAllocate(const ObjectType* type) {
 
 	memh->down = NULL;
 	memh->flags = NULL;
+
+	#ifdef OBJECT_REF_COUNT
+	memh->refc = (alni) 1;
+	#endif
 
 	if (bottom) {
 		bottom->down = memh;
