@@ -3,6 +3,9 @@
 
 #include "primitives/intobject.h"
 
+using namespace obj;
+using namespace tp;
+
 void IntObject::constructor(Object* self) {
 	NDO_CAST(IntObject, self)->val = 0;
 }
@@ -61,7 +64,7 @@ struct ObjectTypeConversions IntObjectTypeConversions = {
 	.to_float = IntObject::to_float,
 };
 
-struct ObjectType IntObjectType = {
+struct ObjectType obj::IntObjectType = {
 	.base = NULL,
 	.constructor = IntObject::constructor,
 	.destructor = NULL,

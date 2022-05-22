@@ -3,20 +3,24 @@
 
 #include "object/object.h"
 
-extern struct NullObject* NdoNull_globalInstance;
+namespace obj {
 
-struct NullObject : Object {
+	extern struct NullObject* NdoNull_globalInstance;
 
-	static void destructor(Object* self);
+	struct NullObject : Object {
 
-	static Object* null_return() {
-		if (!NdoNull_globalInstance) {
-			NdoNull_globalInstance = (NullObject*)NDO->create("null");
+		static void destructor(Object* self);
+
+		static Object* null_return() {
+			if (!NdoNull_globalInstance) {
+				NdoNull_globalInstance = (NullObject*) NDO->create("null");
+			}
+			return (Object*) NdoNull_globalInstance;
 		}
-		return (Object*)NdoNull_globalInstance;
-	}
+	};
+
+	extern ObjectType NullObjectType;
+
+	#define NDO_NULL NullObject::null_return()
+
 };
-
-extern ObjectType NullObjectType;
-
-#define NDO_NULL NullObject::null_return()

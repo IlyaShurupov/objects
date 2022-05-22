@@ -3,20 +3,24 @@
 
 #include "object/object.h"
 
-struct StringObject : Object {
-	string val;
+namespace obj {
 
-	static void constructor(Object* self);
-	static void copy(Object* self, const Object* in);
-	static StringObject* create(string in);
+	struct StringObject : Object {
+		tp::string val;
 
-	static void from_int(StringObject* self, alni in);
-	static void from_float(StringObject* self, alnf in);
-	static void from_string(StringObject* self, string in);
-	static string to_string(StringObject* self);
-	static alni to_int(StringObject* self);
-	static alnf to_float(StringObject* self);
+		static void constructor(Object* self);
+		static void copy(Object* self, const Object* in);
+		static StringObject* create(tp::string in);
+
+		static void from_int(StringObject* self, tp::alni in);
+		static void from_float(StringObject* self, tp::alnf in);
+		static void from_string(StringObject* self, tp::string in);
+		static tp::string to_string(StringObject* self);
+		static tp::alni to_int(StringObject* self);
+		static tp::alnf to_float(StringObject* self);
+	};
+
+
+	extern ObjectType StringObjectType;
+
 };
- 
-
-extern ObjectType StringObjectType;

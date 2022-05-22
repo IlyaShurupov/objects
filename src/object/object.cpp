@@ -2,136 +2,140 @@
 
 #include "object/object.h"
 
-Object* ObjectMemAllocate(const ObjectType* type);
-void ObjectMemDeallocate(Object* in);
+namespace obj {
 
-objects_api* NDO = NULL;
+	Object* ObjectMemAllocate(const ObjectType* type);
+	void ObjectMemDeallocate(Object* in);
 
-void hierarchy_copy(Object* self, const Object* in, const ObjectType* type);
-void hierarchy_construct(Object* self, const ObjectType* type);
+	objects_api* NDO = NULL;
 
-void objects_api::define(ObjectType* type) {
-	assert(NDO);
-	assert(!types.Presents(type->name) && "Type Redefinition");
-	types.Put(type->name, type);
-}
+	void hierarchy_copy(Object* self, const Object* in, const ObjectType* type);
+	void hierarchy_construct(Object* self, const ObjectType* type);
 
-Object* objects_api::create(const string& name) {
-	const ObjectType* type = types.Get(name);
-
-	Object* obj_instance = ObjectMemAllocate(type);
-
-	if (!obj_instance) {
-		return NULL;
+	void objects_api::define(ObjectType* type) {
+		assert(NDO);
+		assert(!types.presents(type->name) && "Type Redefinition");
+		types.put(type->name, type);
 	}
 
-	hierarchy_construct(obj_instance, obj_instance->type);
+	Object* objects_api::create(const tp::string& name) {
+		const ObjectType* type = types.get(name);
 
-	return obj_instance;
-}
+		Object* obj_instance = ObjectMemAllocate(type);
 
-Object* objects_api::copy(Object* self, const Object* in) {
-	if (self->type != in->type) {
-		return NULL;
+		if (!obj_instance) {
+			return NULL;
+		}
+
+		hierarchy_construct(obj_instance, obj_instance->type);
+
+		return obj_instance;
 	}
 
-	hierarchy_copy(self, in, self->type);
+	Object* objects_api::copy(Object* self, const Object* in) {
+		if (self->type != in->type) {
+			return NULL;
+		}
 
-	return self;
-}
+		hierarchy_copy(self, in, self->type);
 
-void objects_api::set(Object* self, alni val) {
-	if (self->type->convesions && self->type->convesions->from_int) {
-		self->type->convesions->from_int(self, val);
-		return;
+		return self;
 	}
-}
 
-void objects_api::set(Object* self, alnf val) {
-	if (self->type->convesions && self->type->convesions->from_float) {
-		self->type->convesions->from_float(self, val);
-		return;
+	void objects_api::set(Object* self, tp::alni val) {
+		if (self->type->convesions && self->type->convesions->from_int) {
+			self->type->convesions->from_int(self, val);
+			return;
+		}
 	}
-}
 
-void objects_api::set(Object* self, string val) {
-	if (self->type->convesions && self->type->convesions->from_string) {
-		self->type->convesions->from_string(self, val);
-		return;
+	void objects_api::set(Object* self, tp::alnf val) {
+		if (self->type->convesions && self->type->convesions->from_float) {
+			self->type->convesions->from_float(self, val);
+			return;
+		}
 	}
-}
+
+	void objects_api::set(Object* self, tp::string val) {
+		if (self->type->convesions && self->type->convesions->from_string) {
+			self->type->convesions->from_string(self, val);
+			return;
+		}
+	}
 
 
-void objects_api::destroy(Object* in) {
+	void objects_api::destroy(Object* in) {
+
+		#ifdef OBJECT_REF_COUNT
+		ObjectMemHead* mh = NDO_MEMH_FROM_NDO(in);
+		if (mh->refc > 1) {
+			mh->refc--;
+			return;
+		}
+		#endif
+
+		if (!in) {
+			return;
+		}
+
+		for (const ObjectType* iter = in->type; iter && iter->destructor; iter = iter->base) {
+			iter->destructor(in);
+		}
+
+		ObjectMemDeallocate(in);
+	}
 
 	#ifdef OBJECT_REF_COUNT
-	ObjectMemHead* mh = NDO_MEMH_FROM_NDO(this);
-	if (mh->refc > 1) {
-		mh->refc--;
-		return;
+	void objects_api::refinc(Object* in) {
+		ObjectMemHead* mh = NDO_MEMH_FROM_NDO(in);
+		mh->refc++;
 	}
 	#endif
 
-	if (!in) {
-		return;
-	}
 
-	for (const ObjectType* iter = in->type; iter && iter->destructor; iter = iter->base) {
-		iter->destructor(in);
-	}
-
-	ObjectMemDeallocate(in);
-}
-
-#ifdef OBJECT_REF_COUNT
-void objects_api::refinc() {
-	ObjectMemHead* mh = NDO_MEMH_FROM_NDO(this);
-	mh->refc++;
-}
-#endif
-
-
-void hierarchy_copy(Object* self, const Object* in, const ObjectType* type) {
-	if (type->base) {
-		hierarchy_copy(self, in, type->base);
-	}
-
-	if (type->copy) {
-		type->copy(self, in);
-	}
-}
-
-void hierarchy_construct(Object* self, const ObjectType* type) {
-	if (type->base) {
-		hierarchy_construct(self, type->base);
-	}
-
-	if (type->constructor) {
-		type->constructor(self);
-	}
-}
-
-Object* ndo_cast(const Object* in, const ObjectType* to_type) {
-	const ObjectType* typeiter = in->type;
-	while (typeiter) {
-		if (typeiter == to_type) {
-			return (Object*) in;
+	void hierarchy_copy(Object* self, const Object* in, const ObjectType* type) {
+		if (type->base) {
+			hierarchy_copy(self, in, type->base);
 		}
-		typeiter = typeiter->base;
-	}
-	return NULL;
-}
 
-objects_api* objects_init() {
-	if (!NDO) {
-		NDO = new objects_api();
-		return NDO;
+		if (type->copy) {
+			type->copy(self, in);
+		}
 	}
-	return NULL;
-}
 
-void objects_finalize() {
-	if (NDO) {
-		delete NDO;
+	void hierarchy_construct(Object* self, const ObjectType* type) {
+		if (type->base) {
+			hierarchy_construct(self, type->base);
+		}
+
+		if (type->constructor) {
+			type->constructor(self);
+		}
 	}
-}
+
+	Object* ndo_cast(const Object* in, const ObjectType* to_type) {
+		const ObjectType* typeiter = in->type;
+		while (typeiter) {
+			if (typeiter == to_type) {
+				return (Object*) in;
+			}
+			typeiter = typeiter->base;
+		}
+		return NULL;
+	}
+
+	objects_api* objects_init() {
+		if (!NDO) {
+			NDO = new objects_api();
+			return NDO;
+		}
+		return NULL;
+	}
+
+	void objects_finalize() {
+		if (NDO) {
+			delete NDO;
+		}
+	}
+
+};

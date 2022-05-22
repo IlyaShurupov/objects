@@ -8,4 +8,6 @@
 #include "primitives/nullobject.h"
 #include "primitives/stringobject.h"
 
-void primitives_define_types();
+namespace obj {
+	void primitives_define_types();
+};

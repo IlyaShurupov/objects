@@ -3,6 +3,9 @@
 
 #include "primitives/stringobject.h"
 
+using namespace obj;
+using namespace tp;
+
 void StringObject::constructor(Object* self) {
 	new (&NDO_CAST(StringObject, self)->val) string();
 }
@@ -62,7 +65,7 @@ struct ObjectTypeConversions StringObjectTypeConversions = {
 	.to_float = (object_to_float)StringObject::to_float,
 };
 
-struct ObjectType StringObjectType = {
+struct ObjectType obj::StringObjectType = {
 	.base = NULL,
 	.constructor = StringObject::constructor,
 	.destructor = NULL,

@@ -7,6 +7,12 @@
 #include "strings.h"
 #include "file.h"
 
+/* Steps to create custom Object:
+define name of object
+define base type
+define struct members
+implement construct, destruct and copy methods */
+
 #define OBJECT_REF_COUNT
 
 #ifndef TYPES_V2
@@ -23,121 +29,119 @@
 
 #define NDO_CASTV(cast_type, ptr, var_name) cast_type* var_name = NDO_CAST(cast_type, ptr); var_name
 
-/* Steps to create custom Object:
-define name of object
-define base type
-define struct members
-implement construct, destruct and copy methods */
-
-extern struct objects_api* NDO;
-
 #define NDO_MEMH_FROM_NDO(ndo_ptr) (((ObjectMemHead*)ndo_ptr) - 1)
 #define NDO_FROM_MEMH(ndo_ptr) ((Object*)(ndo_ptr + 1))
 
-struct ObjectMemHead {
-	ObjectMemHead* up;
-	ObjectMemHead* down;
-	alni flags;
-	#ifdef OBJECT_REF_COUNT
-	alni refc;
-	#endif
+namespace obj {
+
+	extern struct objects_api* NDO;
+
+	struct ObjectMemHead {
+		ObjectMemHead* up;
+		ObjectMemHead* down;
+		tp::alni flags;
+		#ifdef OBJECT_REF_COUNT
+		tp::alni refc;
+		#endif
+	};
+
+	struct Object {
+		const struct ObjectType* type;
+	};
+
+	typedef void (*object_from_int)(Object* self, tp::alni in);
+	typedef void (*object_from_float)(Object* self, tp::alnf in);
+	typedef void (*object_from_string)(Object* self, tp::string in);
+	typedef tp::string(*object_to_string)(Object* self);
+	typedef tp::alni(*object_to_int)(Object* self);
+	typedef tp::alnf(*object_to_float)(Object* self);
+
+	struct ObjectTypeConversions {
+		object_from_int from_int;
+		object_from_float from_float;
+		object_from_string from_string;
+		object_to_string to_string;
+		object_to_int to_int;
+		object_to_float to_float;
+	};
+
+	typedef void (*object_constructor)(Object* self);
+	typedef void (*object_destructor)(Object* self);
+	typedef void (*object_copy)(Object* self, const Object* target);
+	typedef tp::alni(*object_save_size)(Object* self);
+	typedef void (*object_save)(Object*, tp::File&);
+	typedef void (*object_load)(tp::File&, Object*);
+
+	struct object_caller {
+		virtual Object* get(tp::alni idx) = 0;
+		virtual void ret(Object*) = 0;
+	};
+
+	typedef void (type_method_adress)(Object* self, object_caller*);
+	typedef struct {
+		tp::string name;
+		type_method_adress* adress;
+	} type_method;
+
+	struct ObjectType {
+		const ObjectType* base;
+		object_constructor constructor = NULL;
+		object_destructor destructor = NULL;
+		object_copy copy = NULL;
+		tp::alni size = NULL;
+		tp::string name;
+		const ObjectTypeConversions* convesions = NULL;
+		object_save_size save_size = NULL;
+		object_save save = NULL;
+		object_load load = NULL;
+		type_method* methods = NULL;
+	};
+
+
+	#define SAVE_LOAD_MAX_CALLBACK_SLOTS 100
+	typedef void (pre_save_callback)(void* self, tp::File&);
+	typedef void (pre_load_callback)(void* self, tp::File&);
+	typedef void (post_save_callback)(void* self, tp::File&);
+	typedef void (post_load_callback)(void* self, tp::File&);
+	struct save_load_callbacks {
+		void* self;
+		pre_save_callback* pre_save;
+		pre_load_callback* pre_load;
+		post_save_callback* post_save;
+		post_load_callback* post_load;
+	};
+
+
+	struct objects_api {
+
+		tp::HashMap<const ObjectType*, tp::string> types;
+
+		void define(ObjectType* type);
+		Object* create(const tp::string& name);
+		Object* copy(Object* self, const Object* in);
+		void set(Object* self, tp::alni val);
+		void set(Object* self, tp::alnf val);
+		void set(Object* self, tp::string val);
+		void destroy(Object* in);
+
+		#ifdef OBJECT_REF_COUNT
+		void refinc(Object* in);
+		#endif
+
+		save_load_callbacks* sl_callbacks[SAVE_LOAD_MAX_CALLBACK_SLOTS];
+		tp::alni sl_callbacks_load_idx = 0;
+
+		void add_sl_callbacks(save_load_callbacks*);
+
+		void save(Object*, tp::string path);
+		Object* load(tp::string path);
+		tp::alni save(tp::File&, Object*);
+		Object* load(tp::File&, tp::alni file_adress);
+	};
+
+	Object* ndo_cast(const Object* in, const ObjectType* to_type);
+
+	objects_api* objects_init();
+	void objects_finalize();
+
 };
-
-struct Object {
-	const struct ObjectType* type;
-};
-
-typedef void (*object_from_int)(Object* self, alni in);
-typedef void (*object_from_float)(Object* self, alnf in);
-typedef void (*object_from_string)(Object* self, string in);
-typedef string (*object_to_string)(Object* self);
-typedef alni (*object_to_int)(Object* self);
-typedef alnf (*object_to_float)(Object* self);
-
-struct ObjectTypeConversions {
-	object_from_int from_int;
-	object_from_float from_float;
-	object_from_string from_string;
-	object_to_string to_string;
-	object_to_int to_int;
-	object_to_float to_float;
-};
-
-typedef void (*object_constructor)(Object* self);
-typedef void (*object_destructor)(Object* self);
-typedef void (*object_copy)(Object* self, const Object* target);
-typedef alni (*object_save_size)(Object* self);
-typedef void (*object_save)(Object*, File&);
-typedef void (*object_load)(File&, Object*);
-
-struct object_caller {
-	virtual Object* get(alni idx) = 0;
-	virtual void ret(Object*) = 0;
-};
-
-typedef void (type_method_adress)(Object* self, object_caller*);
-typedef struct {
-	string name; 
-	type_method_adress* adress;
-} type_method;
-
-struct ObjectType {
-	const ObjectType* base;
-	object_constructor constructor = NULL;
-	object_destructor destructor = NULL;
-	object_copy copy = NULL;
-	alni size = NULL;
-	string name;
-	const ObjectTypeConversions* convesions = NULL;
-	object_save_size save_size = NULL;
-	object_save save = NULL;
-	object_load load = NULL;
-	type_method* methods = NULL;
-};
-
-
-#define SAVE_LOAD_MAX_CALLBACK_SLOTS 100
-typedef void (pre_save_callback)(void* self, File&);
-typedef void (pre_load_callback)(void* self, File&);
-typedef void (post_save_callback)(void* self, File&);
-typedef void (post_load_callback)(void* self, File&);
-struct save_load_callbacks {
-	void* self;
-	pre_save_callback* pre_save;
-	pre_load_callback* pre_load;
-	post_save_callback* post_save;
-	post_load_callback* post_load;
-};
-
-
-struct objects_api {
-
-	HashMap<const ObjectType*, string> types;
-
-	void define(ObjectType* type);
-	Object* create(const string& name);
-	Object* copy(Object* self, const Object* in);
-	void set(Object* self, alni val);
-	void set(Object* self, alnf val);
-	void set(Object* self, string val);
-	void destroy(Object* in);
-
-	#ifdef OBJECT_REF_COUNT
-	void refinc();
-	#endif
-
-	save_load_callbacks* sl_callbacks[SAVE_LOAD_MAX_CALLBACK_SLOTS];
-	alni sl_callbacks_load_idx = 0;
-
-	void add_sl_callbacks(save_load_callbacks*);
-
-	void save(Object*, string path);
-	Object* load(string path);
-	alni save(File&, Object*);
-	Object* load(File&, alni file_adress);
-};
-
-Object* ndo_cast(const Object* in, const ObjectType* to_type);
-
-objects_api* objects_init();
-void objects_finalize();

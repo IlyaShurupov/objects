@@ -3,6 +3,9 @@
 
 #include "primitives/LinkObject.h"
 
+using namespace obj;
+using namespace tp;
+
 void LinkObject::constructor(Object* self) {
 	NDO_CAST(LinkObject, self)->link = 0;
 }
@@ -44,7 +47,7 @@ static void load(File& file_self, LinkObject* self) {
 	}
 }
 
-struct ObjectType LinkObjectType = {
+struct ObjectType obj::LinkObjectType = {
 	.base = NULL,
 	.constructor = LinkObject::constructor,
 	.destructor = NULL,

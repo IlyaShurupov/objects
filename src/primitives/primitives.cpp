@@ -3,7 +3,11 @@
 
 #include "primitives/primitives.h"
 
-void primitives_define_types() {
+
+void obj::primitives_define_types() {
+	
+	using namespace obj;
+	using namespace tp;
 
 	static bool initialized = false;
 	if (initialized) {

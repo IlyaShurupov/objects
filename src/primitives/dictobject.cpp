@@ -2,6 +2,9 @@
 
 #include "primitives/dictobject.h"
 
+using namespace obj;
+using namespace tp;
+
 void DictObject::constructor(Object* self) {
 	NDO_CASTV(DictObject, self, dict);
 
@@ -19,7 +22,7 @@ void DictObject::copy(Object* in, const Object* target) {
 	for (auto item : src->items) {
 		Object* instance = NDO->create(item->val->type->name);
 		instance->type->copy(instance, item->val);
-		self->items.Put(item->key, instance);
+		self->items.put(item->key, instance);
 	}
 }
 
@@ -48,7 +51,7 @@ static alni save_size(DictObject* self) {
 static void save(DictObject* self, File& file_self) {
 
 	// write size
-	alni len = self->items.nentries;
+	alni len = self->items.size();
 	file_self.write<alni>(&len);
 
 	// save hashmap pairs
@@ -81,11 +84,11 @@ static void load(File& file_self, DictObject* self) {
 		file_self.read(key);
 
 		// add to dictinary
-		self->items.Put(key, val);
+		self->items.put(key, val);
 	}
 }
 
-struct ObjectType DictObjectType = {
+struct ObjectType obj::DictObjectType = {
 	.base = NULL,
 	.constructor = DictObject::constructor,
 	.destructor = DictObject::destructor,
