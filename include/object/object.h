@@ -7,6 +7,8 @@
 #include "strings.h"
 #include "file.h"
 
+#include "object/typegroups.h"
+
 /* Steps to create custom Object:
 define name of object
 define base type
@@ -20,11 +22,11 @@ implement construct, destruct and copy methods */
 #endif
 
 #ifdef _DEBUG
-#define NDO_CAST(cast_type, ptr) ((cast_type*)ndo_cast(ptr, &cast_type##Type))
-#define NDO_CAST_ASSERT(cast_type, ptr) {assert(ndo_cast(ptr, &cast_type##Type))}
+#define NDO_CAST(cast_type, ptr) ((cast_type*)ndo_cast(ptr, &cast_type::TypeData))
+#define NDO_CAST_ASSERT(cast_type, ptr) {assert(ndo_cast(ptr, &cast_type::TypeData))}
 #else
-#define NDO_CAST_ASSERT(cast_type, ptr) (0)
-#define NDO_CAST(cast_type, ptr) ((cast_type*)ptr)
+#define NDO_CAST_ASSERT(cast_type, ptr) {assert(ndo_cast(ptr, &cast_type::TypeData))}
+#define NDO_CAST(cast_type, ptr) ((cast_type*)ndo_cast(ptr, &cast_type::TypeData))
 #endif
 
 #define NDO_CASTV(cast_type, ptr, var_name) cast_type* var_name = NDO_CAST(cast_type, ptr); var_name
@@ -71,6 +73,7 @@ namespace obj {
 	typedef tp::alni(*object_save_size)(Object* self);
 	typedef void (*object_save)(Object*, tp::File&);
 	typedef void (*object_load)(tp::File&, Object*);
+	typedef bool (*object_compare)(Object*, Object*);
 
 	struct object_caller {
 		virtual Object* get(tp::alni idx) = 0;
@@ -84,7 +87,7 @@ namespace obj {
 	} type_method;
 
 	struct ObjectType {
-		const ObjectType* base;
+		const ObjectType* base = NULL;
 		object_constructor constructor = NULL;
 		object_destructor destructor = NULL;
 		object_copy copy = NULL;
@@ -94,7 +97,11 @@ namespace obj {
 		object_save_size save_size = NULL;
 		object_save save = NULL;
 		object_load load = NULL;
+		object_compare comparison = NULL;
 		type_method* methods = NULL;
+		void* vtable = NULL;
+		tp::string description;
+		void* nodes_custom_data = NULL;
 	};
 
 
@@ -115,13 +122,22 @@ namespace obj {
 	struct objects_api {
 
 		tp::HashMap<const ObjectType*, tp::string> types;
+		obj::TypeGroups type_groups;
 
 		void define(ObjectType* type);
 		Object* create(const tp::string& name);
 		Object* copy(Object* self, const Object* in);
+		bool compare(Object* first, Object* second);
+		Object* instatiate(Object*);
 		void set(Object* self, tp::alni val);
 		void set(Object* self, tp::alnf val);
 		void set(Object* self, tp::string val);
+
+		tp::alni toInt(Object* self);
+		tp::alnf toFloat(Object* self);
+		bool toBool(Object* self);
+		tp::string toString(Object* self);
+
 		void destroy(Object* in);
 
 		#ifdef OBJECT_REF_COUNT

@@ -28,7 +28,7 @@ void IntObject::from_float(Object* self, alnf in) {
 }
 
 void IntObject::from_string(Object* self, string in) {
-	NDO_CAST(IntObject, self)->val = in;
+	NDO_CAST(IntObject, self)->val = alni(in);
 }
 
 string IntObject::to_string(Object* self) {
@@ -64,7 +64,7 @@ struct ObjectTypeConversions IntObjectTypeConversions = {
 	.to_float = IntObject::to_float,
 };
 
-struct ObjectType obj::IntObjectType = {
+struct obj::ObjectType obj::IntObject::TypeData = {
 	.base = NULL,
 	.constructor = IntObject::constructor,
 	.destructor = NULL,

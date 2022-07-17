@@ -37,7 +37,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\object\object.h" />
+    <ClInclude Include="..\include\object\typegroups.h" />
+    <ClInclude Include="..\include\primitives\boolobject.h" />
+    <ClInclude Include="..\include\primitives\classobject.h" />
     <ClInclude Include="..\include\primitives\dictobject.h" />
+    <ClInclude Include="..\include\primitives\enumobject.h" />
+    <ClInclude Include="..\include\primitives\floatobject.h" />
     <ClInclude Include="..\include\primitives\intobject.h" />
     <ClInclude Include="..\include\primitives\linkobject.h" />
     <ClInclude Include="..\include\primitives\listobject.h" />
@@ -48,7 +53,12 @@
   <ItemGroup>
     <ClCompile Include="..\src\object\object.cpp" />
     <ClCompile Include="..\src\object\objectsave.cpp" />
+    <ClCompile Include="..\src\object\typegroups.cpp" />
+    <ClCompile Include="..\src\primitives\boolobject.cpp" />
+    <ClCompile Include="..\src\primitives\classobject.cpp" />
     <ClCompile Include="..\src\primitives\dictobject.cpp" />
+    <ClCompile Include="..\src\primitives\enumobject.cpp" />
+    <ClCompile Include="..\src\primitives\floatobject.cpp" />
     <ClCompile Include="..\src\primitives\intobject.cpp" />
     <ClCompile Include="..\src\primitives\linkobject.cpp" />
     <ClCompile Include="..\src\primitives\listobject.cpp" />

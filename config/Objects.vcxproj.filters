@@ -45,6 +45,21 @@
     <ClInclude Include="..\include\primitives\primitives.h">
       <Filter>include\primitives</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\primitives\classobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\boolobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\floatobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives\enumobject.h">
+      <Filter>include\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\object\typegroups.h">
+      <Filter>include\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\primitives\dictobject.cpp">
@@ -73,6 +88,21 @@
     </ClCompile>
     <ClCompile Include="..\src\primitives\primitives.cpp">
       <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\classobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\boolobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\floatobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives\enumobject.cpp">
+      <Filter>source\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\object\typegroups.cpp">
+      <Filter>source\object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

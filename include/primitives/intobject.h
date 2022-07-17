@@ -8,6 +8,7 @@ namespace obj {
 	struct IntObject : Object {
 		tp::alni val;
 
+		static ObjectType TypeData;
 		static void constructor(Object* self);
 		static void copy(Object* self, const Object* in);
 		static IntObject* create(tp::alni in);
@@ -19,8 +20,4 @@ namespace obj {
 		static tp::alni to_int(Object* self);
 		static tp::alnf to_float(Object* self);
 	};
-
-
-	extern ObjectType IntObjectType;
-
 };

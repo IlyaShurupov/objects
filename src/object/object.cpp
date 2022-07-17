@@ -13,7 +13,7 @@ namespace obj {
 	void hierarchy_construct(Object* self, const ObjectType* type);
 
 	void objects_api::define(ObjectType* type) {
-		assert(NDO);
+		assert(NDO && "using uninitialize objects api");
 		assert(!types.presents(type->name) && "Type Redefinition");
 		types.put(type->name, type);
 	}
@@ -42,6 +42,24 @@ namespace obj {
 		return self;
 	}
 
+	bool objects_api::compare(Object* first, Object* second) {
+		if (first && second && first->type == second->type) {
+			if (first->type->comparison) {
+				return first->type->comparison(first, second);
+			} else { // raw data comparison
+				return tp::memequal(first, second, first->type->size);
+			}
+		}
+
+		return false;
+	}
+
+	Object* objects_api::instatiate(Object* in) {
+		obj::Object* obj = NDO->create(in->type->name);
+		NDO->copy(obj, in);
+		return obj;
+	}
+
 	void objects_api::set(Object* self, tp::alni val) {
 		if (self->type->convesions && self->type->convesions->from_int) {
 			self->type->convesions->from_int(self, val);
@@ -63,6 +81,25 @@ namespace obj {
 		}
 	}
 
+	tp::alni objects_api::toInt(Object* self) {
+		assert(self->type->convesions && self->type->convesions->to_int);
+		return self->type->convesions->to_int(self);
+	}
+
+	tp::alnf objects_api::toFloat(Object* self) {
+		assert(self->type->convesions && self->type->convesions->to_float);
+		return self->type->convesions->to_float(self);
+	}
+
+	bool objects_api::toBool(Object* self) {
+		assert(self->type->convesions && self->type->convesions->to_int);
+		return (bool) self->type->convesions->to_int(self);
+	}
+
+	tp::string objects_api::toString(Object* self) {
+		assert(self->type->convesions && self->type->convesions->to_string);
+		return self->type->convesions->to_string(self);
+	}
 
 	void objects_api::destroy(Object* in) {
 

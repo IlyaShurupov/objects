@@ -10,7 +10,7 @@ namespace obj {
 	struct NullObject : Object {
 
 		static void destructor(Object* self);
-
+		static ObjectType TypeData;
 		static Object* null_return() {
 			if (!NdoNull_globalInstance) {
 				NdoNull_globalInstance = (NullObject*) NDO->create("null");
@@ -19,8 +19,6 @@ namespace obj {
 		}
 	};
 
-	extern ObjectType NullObjectType;
-
-	#define NDO_NULL NullObject::null_return()
+	#define NDO_NULL obj::NullObject::null_return()
 
 };

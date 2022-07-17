@@ -36,11 +36,11 @@ string StringObject::to_string(StringObject* self) {
 }
 
 alni StringObject::to_int(StringObject* self) {
-	return self->val;
+	return alni(self->val);
 }
 
 alnf StringObject::to_float(StringObject* self) {
-	return self->val;
+	return alnf(self->val);
 }
 
 static alni save_size(StringObject* self) {
@@ -65,7 +65,7 @@ struct ObjectTypeConversions StringObjectTypeConversions = {
 	.to_float = (object_to_float)StringObject::to_float,
 };
 
-struct ObjectType obj::StringObjectType = {
+struct obj::ObjectType StringObject::TypeData = {
 	.base = NULL,
 	.constructor = StringObject::constructor,
 	.destructor = NULL,

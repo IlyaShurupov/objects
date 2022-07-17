@@ -12,13 +12,9 @@ namespace obj {
 
 	struct ListObject : Object {
 		tp::List<Object*> items;
-
+		static ObjectType TypeData;
 		static void constructor(Object* self);
 		static void copy(Object* self, const Object* in);
 		static void destructor(Object* self);
 	};
-
-
-	extern ObjectType ListObjectType;
-
 };

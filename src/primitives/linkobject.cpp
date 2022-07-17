@@ -47,7 +47,7 @@ static void load(File& file_self, LinkObject* self) {
 	}
 }
 
-struct ObjectType obj::LinkObjectType = {
+struct obj::ObjectType LinkObject::TypeData = {
 	.base = NULL,
 	.constructor = LinkObject::constructor,
 	.destructor = NULL,

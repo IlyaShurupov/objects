@@ -15,9 +15,8 @@ void DictObject::copy(Object* in, const Object* target) {
 	NDO_CASTV(DictObject, in, self);
 	NDO_CASTV(DictObject, target, src);
 
-	self->items.~HashMap();
-
-	new (&self->items) HashMap<Object*, string>();
+	destructor(self);
+	constructor(self);
 
 	for (auto item : src->items) {
 		Object* instance = NDO->create(item->val->type->name);
@@ -28,7 +27,10 @@ void DictObject::copy(Object* in, const Object* target) {
 
 void DictObject::destructor(Object* self) {
 	NDO_CASTV(DictObject, self, dict);
-	dict->items.clear();
+	for (auto item : dict->items) {
+		NDO->destroy(item->val);
+	}
+	dict->items.~HashMap();
 }
 
 static alni save_size(DictObject* self) {
@@ -88,7 +90,7 @@ static void load(File& file_self, DictObject* self) {
 	}
 }
 
-struct ObjectType obj::DictObjectType = {
+struct obj::ObjectType DictObject::TypeData = {
 	.base = NULL,
 	.constructor = DictObject::constructor,
 	.destructor = DictObject::destructor,

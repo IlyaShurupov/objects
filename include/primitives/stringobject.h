@@ -8,6 +8,7 @@ namespace obj {
 	struct StringObject : Object {
 		tp::string val;
 
+		static ObjectType TypeData;
 		static void constructor(Object* self);
 		static void copy(Object* self, const Object* in);
 		static StringObject* create(tp::string in);
@@ -19,8 +20,4 @@ namespace obj {
 		static tp::alni to_int(StringObject* self);
 		static tp::alnf to_float(StringObject* self);
 	};
-
-
-	extern ObjectType StringObjectType;
-
 };

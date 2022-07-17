@@ -23,7 +23,7 @@ void ListObject::copy(Object* in, const Object* target) {
 	for (auto item : src->items) {
 		
 		Object* instance = NDO->create(item->type->name);
-		instance->type->copy(instance, item.Data());
+		instance->type->copy(instance, item.data());
 
 		self->items.pushBack(instance);
 	}
@@ -31,7 +31,9 @@ void ListObject::copy(Object* in, const Object* target) {
 
 void ListObject::destructor(Object* in) {
 	NDO_CASTV(ListObject, in, self);
-	
+	for (auto item : self->items) {
+		NDO->destroy(item.data());
+	}
 	self->items.free();
 }
 
@@ -46,7 +48,7 @@ static void save(ListObject* self, File& file_self) {
 	file_self.write<alni>(&len);
 
 	for (auto item : self->items) {
-		alni ndo_object_adress = NDO->save(file_self, item.Data());
+		alni ndo_object_adress = NDO->save(file_self, item.data());
 		file_self.write<alni>(&ndo_object_adress);
 	}
 }
@@ -80,7 +82,7 @@ type_method ListObjectTypeMethods[] = {
 };
 
 
-struct ObjectType obj::ListObjectType = {
+struct obj::ObjectType obj::ListObject::TypeData = {
 	.base = NULL,
 	.constructor = ListObject::constructor,
 	.destructor = ListObject::destructor,
