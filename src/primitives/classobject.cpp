@@ -38,12 +38,15 @@ void ClassObject::save(ClassObject* self, File& file_self) {
 }
 
 void ClassObject::load(File& file_self, ClassObject* self) {
-
-	NDO->destroy(self->members);
-
 	alni ndo_object_adress;
 	file_self.read<alni>(&ndo_object_adress);
 	self->members = NDO_CAST(DictObject, NDO->load(file_self, ndo_object_adress));
+}
+
+tp::Array<Object*> childs_retrival(ClassObject* self) {
+	tp::Array<Object*> out;
+	out.pushBack(self->members);
+	return out;
 }
 
 struct ObjectType ClassObject::TypeData = {
@@ -56,4 +59,5 @@ struct ObjectType ClassObject::TypeData = {
 	.save_size = (object_save_size)save_size,
 	.save = (object_save)save,
   .load = (object_load)load,
+	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival
 };

@@ -55,7 +55,7 @@ static void save(ListObject* self, File& file_self) {
 
 static void load(File& file_self, ListObject* self) {
 
-	new (&self->items) List<Object*>();
+	new (&self->items) tp::List<Object*>();
 
 	alni len; 
 	file_self.read<alni>(&len);
@@ -65,6 +65,15 @@ static void load(File& file_self, ListObject* self) {
 		file_self.read<alni>(&ndo_object_adress);
 		self->items.pushBack(NDO->load(file_self, ndo_object_adress));
 	}
+}
+
+tp::Array<Object*> childs_retrival(ListObject* self) {
+	tp::Array<Object*> out;
+	out.reserve(self->items.length());
+	for (auto item : self->items) {
+		out[item.idx()] = item.data();
+	}
+	return out;
 }
 
 
@@ -94,4 +103,5 @@ struct obj::ObjectType obj::ListObject::TypeData = {
 	.save = (object_save)save,
 	.load = (object_load)load,
 	.methods = ListObjectTypeMethods,
+	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival
 };

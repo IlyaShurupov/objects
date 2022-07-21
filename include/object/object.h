@@ -74,6 +74,7 @@ namespace obj {
 	typedef void (*object_save)(Object*, tp::File&);
 	typedef void (*object_load)(tp::File&, Object*);
 	typedef bool (*object_compare)(Object*, Object*);
+	typedef tp::Array<Object*> (*object_debug_all_childs_retrival)(Object*);
 
 	struct object_caller {
 		virtual Object* get(tp::alni idx) = 0;
@@ -102,6 +103,7 @@ namespace obj {
 		void* vtable = NULL;
 		tp::string description;
 		void* nodes_custom_data = NULL;
+		object_debug_all_childs_retrival childs_retrival = NULL;
 	};
 
 
@@ -149,7 +151,10 @@ namespace obj {
 
 		void add_sl_callbacks(save_load_callbacks*);
 
-		void save(Object*, tp::string path);
+		tp::alni object_full_file_size(Object* self, const ObjectType* type);
+		tp::alni object_full_file_size_recursive(Object* self, const ObjectType* type);
+
+		bool save(Object*, tp::string path);
 		Object* load(tp::string path);
 		tp::alni save(tp::File&, Object*);
 		Object* load(tp::File&, tp::alni file_adress);

@@ -66,7 +66,19 @@ namespace obj {
 
 	tp::int1* loaded_file = nullptr;
 
-	tp::alni object_full_file_size(Object* self, const ObjectType* type) {
+
+	void clear_object_flags() {
+		// clear all object flags
+		for (ObjectMemHead* iter = bottom; iter; iter = iter->up) {
+			iter->flags = -1;
+		}
+	}
+
+	tp::alni& getObjectFlags(Object* in) {
+		return NDO_MEMH_FROM_NDO(in)->flags;
+	}
+
+	tp::alni objects_api::object_full_file_size(Object* self, const ObjectType* type) {
 		tp::alni out = 0;
 
 		if (type->save_size) {
@@ -74,9 +86,39 @@ namespace obj {
 		}
 
 		if (type->base) {
-			return out + object_full_file_size(self, type->base);
+			out += object_full_file_size(self, type->base);
 		}
 		return out;
+	}
+
+	tp::alni object_full_file_size_recursive_util(Object* self, const ObjectType* type) {
+		tp::alni out = 0;
+
+		getObjectFlags(self) = 1;
+
+		if (type->save_size) {
+			out += type->save_size(self);
+		}
+
+		if (type->childs_retrival) {
+			tp::Array<Object*> childs = type->childs_retrival(self);
+			for (auto child : childs) {
+				if (getObjectFlags(child.data()) != 1) {
+					out += object_full_file_size_recursive_util(child.data(), child.data()->type);
+				}
+			}
+		}
+
+		if (type->base) {
+			out += object_full_file_size_recursive_util(self, type->base);
+		}
+
+		return out;
+	}
+
+	tp::alni objects_api::object_full_file_size_recursive(Object* self, const ObjectType* type) {
+		clear_object_flags();
+		return object_full_file_size_recursive_util(self, type);
 	}
 
 	void object_recursive_save(tp::File& ndf, Object* self, const ObjectType* type) {
@@ -181,13 +223,14 @@ namespace obj {
 		return out;
 	}
 
-	void objects_api::save(Object* in, tp::string path) {
+	bool objects_api::save(Object* in, tp::string path) {
 		tp::File ndf(path, tp::osfile_openflags::SAVE);
 
-		// clear all object flags
-		for (ObjectMemHead* iter = bottom; iter; iter = iter->up) {
-			iter->flags = -1;
+		if (!ndf.opened) {
+			return false;
 		}
+
+		clear_object_flags();
 
 		// presave
 		for (tp::alni i = 0; i < SAVE_LOAD_MAX_CALLBACK_SLOTS; i++) {
@@ -210,6 +253,8 @@ namespace obj {
 				sl_callbacks[i]->post_save(sl_callbacks[i]->self, ndf);
 			}
 		}
+
+		return true;
 	}
 
 	Object* objects_api::load(tp::string path) {

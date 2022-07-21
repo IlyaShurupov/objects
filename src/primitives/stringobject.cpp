@@ -44,16 +44,16 @@ alnf StringObject::to_float(StringObject* self) {
 }
 
 static alni save_size(StringObject* self) {
-	return self->val.size() + 1;
+	return self->val.save_size();
 }
 
 static void save(StringObject* self, File& file_self) {
-	file_self.write(self->val);
+	self->val.save(&file_self);
 }
 
 static void load(File& file_self, StringObject* self) {
-  new (&self->val) string();
-	file_self.read(self->val);
+	new (&self->val) tp::string();
+	self->val.load(&file_self);
 }
 
 struct ObjectTypeConversions StringObjectTypeConversions = {

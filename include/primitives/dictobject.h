@@ -12,6 +12,4 @@ namespace obj {
 		static void destructor(Object* self);
 		static void constructor(Object* self);
 	};
-
-
 };

@@ -69,7 +69,7 @@ static void save(DictObject* self, File& file_self) {
 
 static void load(File& file_self, DictObject* self) {
 
-	new (&self->items) HashMap<Object*, string>();
+	new (&self->items) tp::HashMap<Object*, tp::string>();
 
 	alni len;
 	file_self.read<alni>(&len);
@@ -90,6 +90,15 @@ static void load(File& file_self, DictObject* self) {
 	}
 }
 
+tp::Array<Object*> childs_retrival(DictObject* self) {
+	tp::Array<Object*> out;
+	out.reserve(self->items.size());
+	for (auto item : self->items) {
+		out[item.entry_idx] = item->val;
+	}
+	return out;
+}
+
 struct obj::ObjectType DictObject::TypeData = {
 	.base = NULL,
 	.constructor = DictObject::constructor,
@@ -100,4 +109,5 @@ struct obj::ObjectType DictObject::TypeData = {
 	.save_size = (object_save_size)save_size,
 	.save = (object_save)save,
   .load = (object_load)load,
+	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival
 };

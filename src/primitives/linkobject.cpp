@@ -47,6 +47,12 @@ static void load(File& file_self, LinkObject* self) {
 	}
 }
 
+tp::Array<Object*> childs_retrival(LinkObject* self) {
+	tp::Array<Object*> out;
+	if (self->link) out.pushBack(self->link);
+	return out;
+}
+
 struct obj::ObjectType LinkObject::TypeData = {
 	.base = NULL,
 	.constructor = LinkObject::constructor,
@@ -58,4 +64,5 @@ struct obj::ObjectType LinkObject::TypeData = {
 	.save_size = (object_save_size)save_size,
 	.save = (object_save)save,
 	.load = (object_load)load,
+	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival
 };
