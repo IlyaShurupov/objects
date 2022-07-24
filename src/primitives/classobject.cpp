@@ -49,6 +49,16 @@ tp::Array<Object*> childs_retrival(ClassObject* self) {
 	return out;
 }
 
+alni allocated_size(ClassObject* self) {
+	return sizeof(DictObject*);
+}
+
+alni allocated_size_recursive(ClassObject* self) {
+	alni out = sizeof(DictObject*);
+	out += NDO->objsize_ram_recursive_util(self->members, self->members->type);
+	return out;
+}
+
 struct ObjectType ClassObject::TypeData = {
 	.base = NULL,
 	.constructor = (object_constructor) ClassObject::constructor,
@@ -59,5 +69,7 @@ struct ObjectType ClassObject::TypeData = {
 	.save_size = (object_save_size)save_size,
 	.save = (object_save)save,
   .load = (object_load)load,
-	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival
+	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival,
+	.allocated_size = (object_allocated_size) allocated_size,
+	.allocated_size_recursive = (object_allocated_size_recursive) allocated_size_recursive
 };

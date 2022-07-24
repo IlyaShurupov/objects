@@ -30,6 +30,7 @@ void obj::primitives_define_types() {
 	NDO->type_groups.addType(&DictObject::TypeData, {"Primitives"});
 	NDO->type_groups.addType(&IntObject::TypeData, {"Primitives"});
 	NDO->type_groups.addType(&LinkObject::TypeData, {"Primitives"});
+	NDO->type_groups.addType(&ListObject::TypeData, {"Primitives"});
 	NDO->type_groups.addType(&NullObject::TypeData, {"Primitives"});
 	NDO->type_groups.addType(&StringObject::TypeData, {"Primitives"});
 	NDO->type_groups.addType(&BoolObject::TypeData, {"Primitives"});

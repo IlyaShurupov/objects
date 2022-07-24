@@ -7,6 +7,7 @@ namespace obj {
 
 	struct EnumObject : Object {
 
+		// one entry is 2 * sizeof(alni) in size
 		tp::uhalni active;
 		tp::uhalni nentries;
 		tp::alni* entries;

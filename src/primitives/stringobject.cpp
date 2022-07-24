@@ -56,6 +56,10 @@ static void load(File& file_self, StringObject* self) {
 	self->val.load(&file_self);
 }
 
+alni allocated_size(StringObject* self) {
+	return self->val.sizeAllocatedMem();
+}
+
 struct ObjectTypeConversions StringObjectTypeConversions = {
 	.from_int = (object_from_int)StringObject::from_int,
 	.from_float = (object_from_float)StringObject::from_float,
@@ -76,4 +80,5 @@ struct obj::ObjectType StringObject::TypeData = {
 	.save_size = (object_save_size)save_size,
 	.save = (object_save)save,
 	.load = (object_load)load,
+	.allocated_size = (object_allocated_size) allocated_size,
 };

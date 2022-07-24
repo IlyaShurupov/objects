@@ -78,7 +78,64 @@ namespace obj {
 		return NDO_MEMH_FROM_NDO(in)->flags;
 	}
 
-	tp::alni objects_api::object_full_file_size(Object* self, const ObjectType* type) {
+	tp::alni objsize_ram_util(Object* self, const ObjectType* type) {
+		tp::alni out = 0;
+
+		if (type->allocated_size) {
+			out += type->allocated_size(self);
+		} else {
+			out += type->size - sizeof(ObjectType*);
+		}
+
+		if (type->base) {
+			out += objsize_ram_util(self, type->base);
+		} else {
+			out += sizeof(ObjectType*);
+		}
+
+		return out;
+	}
+
+	tp::alni objects_api::objsize_ram(Object* self) {
+		return objsize_ram_util(self, self->type);
+	}
+
+	tp::alni objects_api::objsize_ram_recursive_util(Object* self, const ObjectType* type, bool different_object) {
+		tp::alni out = 0;
+
+		if (different_object) {
+			if (getObjectFlags(self) == 1) {
+				return 0;
+			}
+
+			getObjectFlags(self) = 1;
+		}		
+		
+		if (type->allocated_size_recursive) {
+			out += type->allocated_size_recursive(self);
+		} else {
+			if (type->allocated_size) {
+				out += type->allocated_size(self);
+			} else {
+				out += type->size - sizeof(ObjectType*);
+			}
+		}
+
+		if (type->base) {
+			out += objsize_ram_recursive_util(self, type->base, false);
+		} else {
+			out += sizeof(ObjectType*);
+		}
+		
+		return out;
+	}
+
+	tp::alni objects_api::objsize_ram_recursive(Object* self) {
+		clear_object_flags();
+		return objsize_ram_recursive_util(self, self->type);
+	}
+
+	tp::alni objsize_file_util(Object* self, const ObjectType* type) {
 		tp::alni out = 0;
 
 		if (type->save_size) {
@@ -86,12 +143,16 @@ namespace obj {
 		}
 
 		if (type->base) {
-			out += object_full_file_size(self, type->base);
+			out += objsize_file_util(self, type->base);
 		}
 		return out;
 	}
 
-	tp::alni object_full_file_size_recursive_util(Object* self, const ObjectType* type) {
+	tp::alni objects_api::objsize_file(Object* self) {
+		return objsize_file_util(self, self->type);
+	}
+
+	tp::alni objsize_file_recursive_util(Object* self, const ObjectType* type) {
 		tp::alni out = 0;
 
 		getObjectFlags(self) = 1;
@@ -104,21 +165,21 @@ namespace obj {
 			tp::Array<Object*> childs = type->childs_retrival(self);
 			for (auto child : childs) {
 				if (getObjectFlags(child.data()) != 1) {
-					out += object_full_file_size_recursive_util(child.data(), child.data()->type);
+					out += objsize_file_recursive_util(child.data(), child.data()->type);
 				}
 			}
 		}
 
 		if (type->base) {
-			out += object_full_file_size_recursive_util(self, type->base);
+			out += objsize_file_recursive_util(self, type->base);
 		}
 
 		return out;
 	}
 
-	tp::alni objects_api::object_full_file_size_recursive(Object* self, const ObjectType* type) {
+	tp::alni objects_api::objsize_file_recursive(Object* self) {
 		clear_object_flags();
-		return object_full_file_size_recursive_util(self, type);
+		return objsize_file_recursive_util(self, self->type);
 	}
 
 	void object_recursive_save(tp::File& ndf, Object* self, const ObjectType* type) {
@@ -160,7 +221,7 @@ namespace obj {
 		ndf.avl_adress += sizeof(ObjectFileHead) + in->type->name.size() + 1;
 
 		// calc max size needed for saving all hierarchy of types
-		tp::alni file_alloc_size = object_full_file_size(in, in->type);
+		tp::alni file_alloc_size = objsize_file_util(in, in->type);
 
 		// offes first available adress
 		ndf.avl_adress += file_alloc_size;

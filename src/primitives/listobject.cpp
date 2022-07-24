@@ -76,6 +76,17 @@ tp::Array<Object*> childs_retrival(ListObject* self) {
 	return out;
 }
 
+alni allocated_size(ListObject* self) {
+	return self->items.sizeAllocatedMem();
+}
+
+alni allocated_size_recursive(ListObject* self) {
+	alni out = self->items.sizeAllocatedMem();
+	for (auto item : self->items) {
+		out += NDO->objsize_ram_recursive_util(item.data(), item->type);
+	}
+	return out;
+}
 
 void list_method_get_length(Object* self, object_caller* caller) {
 	NDO_CAST(IntObject, caller->get(0))->val = NDO_CAST(ListObject, self)->items.length();
@@ -103,5 +114,7 @@ struct obj::ObjectType obj::ListObject::TypeData = {
 	.save = (object_save)save,
 	.load = (object_load)load,
 	.methods = ListObjectTypeMethods,
-	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival
+	.childs_retrival = (object_debug_all_childs_retrival) childs_retrival,
+	.allocated_size = (object_allocated_size) allocated_size,
+	.allocated_size_recursive = (object_allocated_size_recursive) allocated_size_recursive
 };

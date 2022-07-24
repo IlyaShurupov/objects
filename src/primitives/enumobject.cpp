@@ -139,6 +139,14 @@ bool obj::EnumObject::compare(EnumObject* first, EnumObject* second) {
 	return first->entries != NULL && second->entries != NULL && first->active == second->active;
 }
 
+alni allocated_size(EnumObject* self) {
+	alni out = sizeof(uhalni) * 2 + sizeof(tp::alni*);
+	if (self->entries) {
+		out += self->nentries * sizeof(alni) * 2;
+	}
+	return out;
+}
+
 struct ObjectTypeConversions EnumObjectTypeConversions = {
 	.from_int = (object_from_int) EnumObject::from_int,
 	.from_float = (object_from_float) EnumObject::from_float,
@@ -159,5 +167,6 @@ struct obj::ObjectType obj::EnumObject::TypeData = {
 	.save_size = (object_save_size)save_size,
 	.save = (object_save)save,
 	.load = (object_load)load,
-	.comparison = (object_compare) EnumObject::compare
+	.comparison = (object_compare) EnumObject::compare,
+	.allocated_size = (object_allocated_size) allocated_size,
 };

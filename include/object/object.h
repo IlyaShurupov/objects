@@ -75,6 +75,8 @@ namespace obj {
 	typedef void (*object_load)(tp::File&, Object*);
 	typedef bool (*object_compare)(Object*, Object*);
 	typedef tp::Array<Object*> (*object_debug_all_childs_retrival)(Object*);
+	typedef tp::alni (*object_allocated_size)(Object*); // default value = type->size - sizeof(ObjectType*)
+	typedef tp::alni (*object_allocated_size_recursive)(Object*); // default value = object_allocated_size
 
 	struct object_caller {
 		virtual Object* get(tp::alni idx) = 0;
@@ -104,6 +106,8 @@ namespace obj {
 		tp::string description;
 		void* nodes_custom_data = NULL;
 		object_debug_all_childs_retrival childs_retrival = NULL;
+		object_allocated_size allocated_size = NULL;
+		object_allocated_size_recursive allocated_size_recursive = NULL;
 	};
 
 
@@ -151,8 +155,12 @@ namespace obj {
 
 		void add_sl_callbacks(save_load_callbacks*);
 
-		tp::alni object_full_file_size(Object* self, const ObjectType* type);
-		tp::alni object_full_file_size_recursive(Object* self, const ObjectType* type);
+		tp::alni objsize_file(Object* self);
+		tp::alni objsize_file_recursive(Object* self);
+
+		tp::alni objsize_ram(Object* self);
+		tp::alni objsize_ram_recursive_util(Object* self, const ObjectType* type, bool different_object = true);
+		tp::alni objsize_ram_recursive(Object* self);
 
 		bool save(Object*, tp::string path);
 		Object* load(tp::string path);
