@@ -1,6 +1,7 @@
 
 
 #include "object/object.h"
+#include "bz_hli_win32.h"
 
 #include <malloc.h>
 
@@ -284,7 +285,7 @@ namespace obj {
 		return out;
 	}
 
-	bool objects_api::save(Object* in, tp::string path) {
+	bool objects_api::save(Object* in, tp::string path, bool compressed) {
 		tp::File ndf(path, tp::osfile_openflags::SAVE);
 
 		if (!ndf.opened) {
@@ -315,10 +316,22 @@ namespace obj {
 			}
 		}
 
+		ndf.close();
+
+		if (compressed) {
+			BZcompressF2F(path.cstr());
+		}
+
 		return true;
 	}
 
 	Object* objects_api::load(tp::string path) {
+
+		int unz_res = BZuncompressF2F(path.cstr(), true);
+		if (unz_res == NULL) {
+			path += ".unz";
+		}
+
 		tp::File ndf(path, tp::osfile_openflags::LOAD);
 
 		if (!ndf.opened) {
@@ -355,6 +368,13 @@ namespace obj {
 		}
 
 		free(loaded_file);
+
+		ndf.close();
+
+		if (unz_res == NULL) {
+			tp::File::removeFile(path);
+		}
+
 		return out;
 	}
 

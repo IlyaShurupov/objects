@@ -162,7 +162,7 @@ namespace obj {
 		tp::alni objsize_ram_recursive_util(Object* self, const ObjectType* type, bool different_object = true);
 		tp::alni objsize_ram_recursive(Object* self);
 
-		bool save(Object*, tp::string path);
+		bool save(Object*, tp::string path, bool compressed = true);
 		Object* load(tp::string path);
 		tp::alni save(tp::File&, Object*);
 		Object* load(tp::File&, tp::alni file_adress);
