@@ -12,6 +12,10 @@ namespace obj {
 	void hierarchy_copy(Object* self, const Object* in, const ObjectType* type);
 	void hierarchy_construct(Object* self, const ObjectType* type);
 
+	objects_api::objects_api() {
+		tp::memsetv(sl_callbacks, SAVE_LOAD_MAX_CALLBACK_SLOTS * sizeof(save_load_callbacks*), 0);
+	}
+
 	void objects_api::define(ObjectType* type) {
 		assert(NDO && "using uninitialize objects api");
 		assert(!types.presents(type->name) && "Type Redefinition");

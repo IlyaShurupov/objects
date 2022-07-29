@@ -85,7 +85,7 @@ namespace obj {
 
 	typedef void (type_method_adress)(Object* self, object_caller*);
 	typedef struct {
-		tp::string name;
+		const char* name;
 		type_method_adress* adress;
 	} type_method;
 
@@ -95,7 +95,7 @@ namespace obj {
 		object_destructor destructor = NULL;
 		object_copy copy = NULL;
 		tp::alni size = NULL;
-		tp::string name;
+		const char* name;
 		const ObjectTypeConversions* convesions = NULL;
 		object_save_size save_size = NULL;
 		object_save save = NULL;
@@ -103,7 +103,7 @@ namespace obj {
 		object_compare comparison = NULL;
 		type_method* methods = NULL;
 		void* vtable = NULL;
-		tp::string description;
+		const char* description = NULL;
 		void* nodes_custom_data = NULL;
 		object_debug_all_childs_retrival childs_retrival = NULL;
 		object_allocated_size allocated_size = NULL;
@@ -129,6 +129,8 @@ namespace obj {
 
 		tp::HashMap<const ObjectType*, tp::string> types;
 		obj::TypeGroups type_groups;
+
+		objects_api();
 
 		void define(ObjectType* type);
 		Object* create(const tp::string& name);

@@ -63,7 +63,7 @@ static void save(DictObject* self, File& file_self) {
 		file_self.write<alni>(&ndo_object_adress);
 
 		// item key
-		file_self.write(item->key);
+		item->key.save(&file_self);
 	}
 }
 
@@ -83,7 +83,7 @@ static void load(File& file_self, DictObject* self) {
 
 		// read key value
 		string key;
-		file_self.read(key);
+		key.load(&file_self);
 
 		// add to dictinary
 		self->items.put(key, val);

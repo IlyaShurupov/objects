@@ -3,13 +3,18 @@
 #include "oedit.h"
 
 int main() {
-	obj::objects_init();
-	obj::primitives_define_types();
+
+	tp::alloc_init();
 
 	{
+		obj::objects_init();
+		obj::primitives_define_types();
+
 		oeditor_test app;
 		app.Run();
+
+		obj::objects_finalize();
 	}
 
-	obj::objects_finalize();
+	tp::alloc_uninit();
 }

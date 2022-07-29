@@ -23,7 +23,7 @@ namespace obj {
 
 
 	Object* ObjectMemAllocate(const ObjectType* type) {
-		ObjectMemHead* memh = (ObjectMemHead*) malloc(type->size + sizeof(ObjectMemHead));
+		ObjectMemHead* memh = (ObjectMemHead*) tp::heapalloc->Alloc(type->size + sizeof(ObjectMemHead));
 		if (!memh) {
 			return NULL;
 		}
@@ -58,7 +58,7 @@ namespace obj {
 			bottom = memh->up;
 		}
 
-		free(memh);
+		tp::heapalloc->Free(memh);
 	}
 
 	struct ObjectFileHead {
@@ -216,10 +216,10 @@ namespace obj {
 		// save file object header
 		ObjectFileHead ofh;
 		ndf.write(&ofh);
-		ndf.write(in->type->name);
+		tp::string(in->type->name).save(&ndf);
 
 		// allocate for object file header
-		ndf.avl_adress += sizeof(ObjectFileHead) + in->type->name.size() + 1;
+		ndf.avl_adress += sizeof(ObjectFileHead) + tp::slen(in->type->name) + 1;
 
 		// calc max size needed for saving all hierarchy of types
 		tp::alni file_alloc_size = objsize_file_util(in, in->type);
@@ -263,7 +263,7 @@ namespace obj {
 		ObjectFileHead ofh;
 		ndf.read<ObjectFileHead>(&ofh);
 		tp::string type_name;
-		ndf.read(type_name);
+		type_name.load(&ndf);
 
 		const ObjectType* object_type = NDO->types.get(type_name);
 		Object* out = ObjectMemAllocate(object_type);
@@ -286,7 +286,7 @@ namespace obj {
 	}
 
 	bool objects_api::save(Object* in, tp::string path, bool compressed) {
-		tp::File ndf(path, tp::osfile_openflags::SAVE);
+		tp::File ndf(path.cstr(), tp::osfile_openflags::SAVE);
 
 		if (!ndf.opened) {
 			return false;
@@ -332,7 +332,7 @@ namespace obj {
 			path += ".unz";
 		}
 
-		tp::File ndf(path, tp::osfile_openflags::LOAD);
+		tp::File ndf(path.cstr(), tp::osfile_openflags::LOAD);
 
 		if (!ndf.opened) {
 			return NULL;
@@ -372,7 +372,7 @@ namespace obj {
 		ndf.close();
 
 		if (unz_res == NULL) {
-			tp::File::removeFile(path);
+			tp::File::removeFile(path.cstr());
 		}
 
 		return out;

@@ -3,6 +3,8 @@
 
 #include "primitives/enumobject.h"
 
+#include <malloc.h>
+
 using namespace obj;
 using namespace tp;
 
